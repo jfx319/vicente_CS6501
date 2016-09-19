@@ -1,30 +1,54 @@
-
-
-
 # Project Proposal - CS 6501-003: Computational Visual Recognition
 
 Deliver to: 
 visionlab.uva+project@gmail.com
 
-
-
+---
 ## Objective: 
+Given that the class project has minimum requirements and encouraged "reach" goals, we list both here since it cannot be guaranteed without having attempted the tasks. The hope is to achieve both. 
 
-#### A. Re-implementing a previously proposed technique and reproducing the results on an existing dataset.
+At minimum, one of the papers from objective A will be re-implemented.
 
-##### References
-http://www.cs.technion.ac.il/~nastyad/publications/DKGHK_DLMIA2015.pdf  
-http://cs231n.stanford.edu/reports/vibhua_final_report.pdf  
+### A. Re-implementing a previously proposed technique and reproducing the results on an existing dataset.
+
+#### Existing Literature Papers
+
+Data Available for reproducing method
+
+ * Automated Mass Detection from Mammograms using Deep Learning and Random Forest
 http://cs.adelaide.edu.au/~carneiro/publications/mass_detection_BIA.pdf  
+INbreast dataset comprises a set of 115 cases containing 410 images, where out of 410 images, 116 images contains the benign or malignant masses, whereas the rest does not contain any masses
+All images on the DDSM-BCRP dataset contain malignant masses, with 39 cases for training and 40 cases for testing
+
+* Using Deep Convolutional Neural Networks to Predict Semantic Features of Lesions in Mammograms
+http://cs231n.stanford.edu/reports/vibhua_final_report.pdf  
+Digital Database for Screening Mammography (DDSM)
+2,500 samples, pixel-level ground-truth annotation of suspicious areas
+5 convolutional layers, 3 fully-connected layers
+
+Data not available, but ideas/methods may be applied to other datasets:
+
+ * Computational Mammography using Deep Neural Networks:  
+http://www.cs.technion.ac.il/~nastyad/publications/DKGHK_DLMIA2015.pdf  
+http://m.ibm.com/http/research.ibm.com/haifa/dept/imt/mia.shtml  
+
+ * Discrimination of Breast Cancer with Microcalcifications on Mammography by Deep Learning
 http://www.nature.com/articles/srep27327 (data not public)  
+Training: 1000 images, including 677 benign and 323 malignant lesions  
+Testing: 204 images, including 97 benign and 107 malignant lesions
 
 
-#### B. Applying/improving existing techniques to a new dataset.
+
+
+
+### B. Applying/improving existing techniques to a new dataset.
 As part of a current ongoing open competition, a dataset of 640,000 de-identified digital mammography images from over 86000 patients, with corresponding clinical variables is available for training. The benefits include large dataset size, free computational resources (model is trained remotely on their server). The downsides are that the data is not publicly viewable and one is unable to access the trained model for inspection/visualization.  
 https://www.synapse.org/#!Synapse:syn4224222/wiki/401743  
 
+Core concepts, strategies, and algorithms from objective A will be applied to objective B.
 
 
+---
 ## Problem Statement: 
 
 #### Impact / Motivation: 
@@ -41,19 +65,25 @@ Use deep Learning image recognition in the form of convolutional neural networks
   * improve radiologist's interpretive accuracy 
   * reduce the overall recall rate without increasing the number of false negative exams
 
-
 ##### A. Classification of 2D mammography images
+Given mammography images, classify each image into labeled categories (e.g. benign or tumor). 
+
+##### B. (Optional) Segmentation of 2D mammography images
+Given mammography images, classify each pixel into labeled categories (e.g. background, calcification, bone, lesion/tumor). 
+
+Additional evaluation metrics will be imposed for segmentation: 
+ * Dice coefficient [Dubrovina1 et al](http://www.cs.technion.ac.il/~nastyad/publications/DKGHK_DLMIA2015.pdf)
+ * Intersection over Union (IU) [Long et al](https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf)
 
 
-##### B. Segmentation of 2D mammography images
-
-
-
+---
 ## Proposed Model: 
+
+The model architecture is still being evaluated and may vary depending on the objective (replicating existing approach, or implementing a new one). It will likely consist of layered CNN for learning high-level image features as well as a SVM or FC layer(s) for final classification. For the separate task of image segmentation, an inverted architecture will be explored after the CNN (e.g. a deconvolutinal net or similar).
 
 #### Inputs: 
 
-A screening mammography exam consisting of 2 or more images for each (L/R) breast.
+A screening mammography exam consisting of 2 or more images for each (L/R) breast. These are single-channel black/white images.
 
 #### Outputs: 
 
@@ -70,8 +100,7 @@ The training process seeks to minimize the cross-entropy loss of the output pred
 
 According to the federally-funded Breast Cancer Surveillance Consortium, the overall sensitivity of digital mammography in the U.S. screening population is 84%, and the overall specificity is 91% [[3](http://www.ncbi.nlm.nih.gov/pubmed/26501537)]. This represents the gold standard human (radiologist) performance.
 
-
-
+A rough initial comparison can be made with accuracy and specificity on standardized held-out testing data (for each dataset). 
 
 ##### *Primary metric*:  Area Under the Receiver Operating Characteristics (AUROC)
 
@@ -89,7 +118,7 @@ The pAUROC emphasizes a specific region of the ROC. As objective is concerned wi
 ![pAUROC](https://www.synapse.org/Portal/filehandle?ownerId=syn4224222&ownerType=ENTITY&xsrfToken=null&fileName=pAUC_se_fig_correct_version2.jpg&preview=false&wikiId=402020)
 
 
-
+---
 ## Proposed Datasets: 
 
 #### 
@@ -98,7 +127,7 @@ The pAUROC emphasizes a specific region of the ROC. As objective is concerned wi
 #### 
 
 
-
+---
 ## Project Outcome / Deliverable
 
 #### 
