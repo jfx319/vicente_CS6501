@@ -15,12 +15,12 @@ At minimum, one of the papers from objective A will be re-implemented.
 
 Data Available for reproducing method
 
- * Automated Mass Detection from Mammograms using Deep Learning and Random Forest
+ * Automated Mass Detection from Mammograms using Deep Learning and Random Forest  
 http://cs.adelaide.edu.au/~carneiro/publications/mass_detection_BIA.pdf  
 INbreast dataset comprises a set of 115 cases containing 410 images, where out of 410 images, 116 images contains the benign or malignant masses, whereas the rest does not contain any masses
 All images on the DDSM-BCRP dataset contain malignant masses, with 39 cases for training and 40 cases for testing
 
-* Using Deep Convolutional Neural Networks to Predict Semantic Features of Lesions in Mammograms
+* Using Deep Convolutional Neural Networks to Predict Semantic Features of Lesions in Mammograms  
 http://cs231n.stanford.edu/reports/vibhua_final_report.pdf  
 Digital Database for Screening Mammography (DDSM)
 2,500 samples, pixel-level ground-truth annotation of suspicious areas
@@ -32,12 +32,12 @@ Data not available, but ideas/methods may be applied to other datasets:
 http://www.cs.technion.ac.il/~nastyad/publications/DKGHK_DLMIA2015.pdf  
 http://m.ibm.com/http/research.ibm.com/haifa/dept/imt/mia.shtml  
 
- * Discrimination of Breast Cancer with Microcalcifications on Mammography by Deep Learning
+ * Discrimination of Breast Cancer with Microcalcifications on Mammography by Deep Learning  
 http://www.nature.com/articles/srep27327  
 Training: 1000 images, including 677 benign and 323 malignant lesions  
 Testing: 204 images, including 97 benign and 107 malignant lesions
 
- * Unsupervised Deep Learning Applied to Breast Density Segmentation and Mammographic Risk Scoring
+ * Unsupervised Deep Learning Applied to Breast Density Segmentation and Mammographic Risk Scoring  
 http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7412749&tag=1  
 Dutch Breast Cancer Screening Dataset  
 394 cancers, and 1182 healthy controls  
