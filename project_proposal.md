@@ -9,7 +9,7 @@ Given that the class project has minimum requirements and encouraged "reach" goa
 
 At minimum, one of the papers from objective A will be re-implemented.
 
-### A. Re-implementing a previously proposed technique and reproducing the results on an existing dataset.
+### A. Re-implementing a previously proposed technique and reproducing the results on an existing dataset
 
 #### Existing Literature Papers
 
@@ -41,7 +41,7 @@ Testing: 204 images, including 97 benign and 107 malignant lesions
 
 
 
-### B. Applying/improving existing techniques to a new dataset.
+### B. Applying/improving existing techniques to a new dataset
 As part of a current ongoing open competition, a dataset of 640,000 de-identified digital mammography images from over 86000 patients, with corresponding clinical variables is available for training. The benefits include large dataset size, free computational resources (model is trained remotely on their server). The downsides are that the data is not publicly viewable and one is unable to access the trained model for inspection/visualization.  
 https://www.synapse.org/#!Synapse:syn4224222/wiki/401743  
 
@@ -121,15 +121,51 @@ The pAUROC emphasizes a specific region of the ROC. As objective is concerned wi
 ---
 ## Proposed Datasets: 
 
-#### 
-#### 
-#### 
-#### 
+#### mini-MIAS
+The Mammographic Image Analysis Society (MIAS) is an organisation of UK research groups interested in the understanding of mammograms and has generated a database of digital mammograms. Films taken from the UK National Breast Screening Programme have been digitised to 50 micron pixel edge with a Joyce-Loebl scanning microdensitometer, a device linear in the optical density range 0-3.2 and representing each pixel with an 8-bit word. The database contains 322 digitised films and is available on 2.3GB 8mm (ExaByte) tape. It also includes radiologist's "truth"-markings on the locations of any abnormalities that may be present. The database has been reduced to a 200 micron pixel edge and padded/clipped so that all the images are 1024x1024. Mammographic images are available via the Pilot European Image Processing Archive (PEIPA) at the University of Essex.  http://peipa.essex.ac.uk/info/mias.html
+
+The database contains left and right breast images for 161 patients, and is available on a DAT-DDS tape. Its quantity consists of 322 images, which belong to three types: 208 normal, 63 benign and 51 malignant (abnormal) images. It also includes radiologist's `truth'-markings on the locations of any abnormalities that may be present. For each film, experienced radiologists give the type, location, scale, and other useful information of them. According to these experts’ descriptions, the database is conclude of four kinds of abnormities (architectural distortions, stellate lesions, circumscribed mass and calcifications). The database possesses an introduction file, which included following information:  
+* type: which kinds mentioned above the abnormities belong to. 
+* sort: whether the abnormities are cancer or benign ones.
+* location and size: the original coordinates and diameters of the abnormities.  
+
+##### Agreement between Radiologists on MIAS
+http://eia.udg.es/~aoliver/publications/tesi/node64.html  
+
+data from a random sample of 20,000 digital and 20,000 film-screen mammograms received by women age 60-89 years within the BCSC between January 2005 and December 2008.
+
+
+
+
+#### BCSC
+http://www.bcsc-research.org/data/mammography_dataset/
+
+
+
+#### DDSM
+The Digital Database for Screening Mammography (DDSM) is another resource for possible use by the mammographic image analysis research community. It is a collaborative effort between Massachusetts General Hospital, Sandia National Laboratories and the University of South Florida Computer Science and Engineering Department. The database contains approximately 2,500 studies. Each study includes two images of each breast, along with some associated patient information (age at time of study, ACR breast density rating, subtlety rating for abnormalities, ACR keyword description of abnormalities) and image information (scanner, spatial resolution, ...). Images containing suspicious areas have associated pixel-level "ground truth" information about the locations and types of suspicious regions. Also provided are software both for accessing the mammogram and truth images and for calculating performance figures for automated image analysis algorithms.  
+In total, 2620 cases (695 normal,  870 benign, 914 cancer, 141 benign with callback), collectively totalling 8752 images with pixel masks overlay files. Heterogeneous files, 16bit or 12bit compressed lossless jpeg, 42 or 43.5 or 50 microns)  
+http://see.xidian.edu.cn/vipsl/database_Mammo.html  
+Data page:  
+http://marathon.csee.usf.edu/Mammography/Database.html
+* really look at notes, e.g. "The rollers slipped while the image was scanning. That is why the letters look distorted. "
+
+#### DDSM BCRP (pixel level ground truth)
+http://marathon.csee.usf.edu/Mammography/DDSM/BCRP/bcrp.html
+
+
+#### INBREAST
+FFDM, completely digital to begin with. 115 cases (410 images). 90 cases are from bilateral involvement, 25 cases are from mastectomy patients. Contours by specialists provided in XML format. Several types of lesions (masses, calcifications, asymmetries, and distortions) were included.  
+calcifications are present in 301 of the 410 images. The tag “cluster” was only used in 27 sets of calcifications, in 21 images (≈1.3 clusters per image). Of these 21 images, only 2 had no single calcifications annotation. A total of 6880 calcifications were thus individually identified in 299 images (≈23.0 calcifications per image).
+
+
 
 
 ---
 ## Project Outcome / Deliverable
 
-#### 
-#### 
+Regardless of whether this project achieves both objectives (replicating past study, or implementing/applying to new dataset), the following will be the presented: 
 
+ * Compare evaluation metrics & performance to that of the study. 
+ * Visualization of learned features/filters at various layers
+ * If segmentation task is attempted:  visualizing predicted segmentation regions. 
