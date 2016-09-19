@@ -33,12 +33,16 @@ http://www.cs.technion.ac.il/~nastyad/publications/DKGHK_DLMIA2015.pdf
 http://m.ibm.com/http/research.ibm.com/haifa/dept/imt/mia.shtml  
 
  * Discrimination of Breast Cancer with Microcalcifications on Mammography by Deep Learning
-http://www.nature.com/articles/srep27327 (data not public)  
+http://www.nature.com/articles/srep27327  
 Training: 1000 images, including 677 benign and 323 malignant lesions  
 Testing: 204 images, including 97 benign and 107 malignant lesions
 
-
-
+ * Unsupervised Deep Learning Applied to Breast Density Segmentation and Mammographic Risk Scoring
+http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7412749&tag=1  
+Dutch Breast Cancer Screening Dataset  
+394 cancers, and 1182 healthy controls  
+images were segmented into the breast area, pectoral muscle and background using automated software (Volpara, Matakina Technology Limited, New Zealand)
+texture dataset comprises 668 mediolateral mammograms from the Mayo mammography Health Study (MMHS) cohort at the Mayo Clinic in Rochester, Minnesota. The purpose of the MMHS study was to examine the association of breast density with breast cancer [58]. The chosen subset included 226 cases and 442 controls
 
 
 ### B. Applying/improving existing techniques to a new dataset
