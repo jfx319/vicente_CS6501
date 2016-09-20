@@ -89,7 +89,9 @@ sudo apt-get install nvidia-361
 sudo apt-get install mesa-common-dev
 sudo apt-get install freeglut3-dev
 ```
+Note to self: skipped mesa and freeglut3 for now. Might need to disable Nouveau?
 
+Reboot system to load drivers. 
 
 
 
