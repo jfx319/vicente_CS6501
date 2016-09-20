@@ -1,6 +1,7 @@
 
+### CS SLURM Wiki
 
-
+https://www.cs.virginia.edu/~csadmin/wiki/index.php/SLURM#Submitting_Jobs
 
 ### CS Queues
 
