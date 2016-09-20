@@ -37,7 +37,12 @@ Go to localhost:8888 if you are using Linux Docker or Docker for Mac/Window. If 
 ### To use cuda using nvidia docker
 To use cuda using docker, you may take a look at this docker image.  
 https://hub.docker.com/r/kaixhin/cuda-torch/
- 
+
+```
+nvidia-docker run -it -p 8888:8888 kaixhin/cuda-torch
+Then run jupyter notebook --ip="0.0.0.0" --no-browser to open a notebook on localhost:8888.
+```
+
 And to run this docker, you need to install nvidia docker first.  
 https://github.com/NVIDIA/nvidia-docker
  
