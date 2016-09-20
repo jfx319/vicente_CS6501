@@ -38,18 +38,39 @@ Go to localhost:8888 if you are using Linux Docker or Docker for Mac/Window. If 
 To use cuda using docker, you may take a look at this docker image.  
 https://hub.docker.com/r/kaixhin/cuda-torch/
 
+And to run this docker, you need to install nvidia docker first.  
+https://github.com/NVIDIA/nvidia-docker
+```
+wget -P /tmp https://github.com/NVIDIA/nvidia-docker/releases/download/v1.0.0-rc.3/nvidia-docker_1.0.0.rc.3-1_amd64.deb
+sudo dpkg -i /tmp/nvidia-docker*.deb && rm /tmp/nvidia-docker*.deb
+```
+
+And checkout this page for cuda version to use which depends on your nvidia driver version.  
+https://github.com/NVIDIA/nvidia-docker/wiki/CUDA#requirements
+```bash
+sudo add-apt-repository ppa:graphics-drivers/ppa
+sudo apt-get update
+sudo apt-get install nvidia-361
+
+#Reboot system to load drivers. 
+#Note to self: skipped mesa and freeglut3 for now. Did not bother disabling Nouveau
+
+sudo apt-get install mesa-common-dev
+sudo apt-get install freeglut3-dev
+```
+
+Once you've finished installing nvidia driver and nvidia-docker, run:
 ```
 nvidia-docker run -it --rm -p 8888:8888 kaixhin/cuda-torch
+
 Then run jupyter notebook --ip="0.0.0.0" --no-browser to open a notebook on localhost:8888.
 
 python kernel not found
+need to install itorch kernel (not included in kaixhin's container)
+
 ```
 
-And to run this docker, you need to install nvidia docker first.  
-https://github.com/NVIDIA/nvidia-docker
- 
-And checkout this page for cuda version to use which depends on your nvidia driver version.  
-https://github.com/NVIDIA/nvidia-docker/wiki/CUDA#requirements
+
 
 
 ### A useful guide for CUDA installation
@@ -89,16 +110,6 @@ $ sudo ./NVIDIA-Linux-x86_64-361.45.11.run
 ```
 
 
-```bash
-sudo add-apt-repository ppa:graphics-drivers/ppa
-sudo apt-get update
-sudo apt-get install nvidia-361
-sudo apt-get install mesa-common-dev
-sudo apt-get install freeglut3-dev
-```
-Note to self: skipped mesa and freeglut3 for now. Might need to disable Nouveau?
-
-Reboot system to load drivers. 
 
 
 
