@@ -39,8 +39,10 @@ To use cuda using docker, you may take a look at this docker image.
 https://hub.docker.com/r/kaixhin/cuda-torch/
 
 ```
-nvidia-docker run -it -p 8888:8888 kaixhin/cuda-torch
+nvidia-docker run -it --rm -p 8888:8888 kaixhin/cuda-torch
 Then run jupyter notebook --ip="0.0.0.0" --no-browser to open a notebook on localhost:8888.
+
+python kernel not found
 ```
 
 And to run this docker, you need to install nvidia docker first.  
