@@ -64,21 +64,36 @@ Once you've finished installing nvidia driver and nvidia-docker, run:
 nvidia-docker run -it --rm -p 8888:8888 kaixhin/cuda-torch
 
 #need to install itorch kernel (not included in kaixhin's container)
-sudo apt-get install -y wget #for convenience later
-cd /root 
-git clone https://github.com/facebook/iTorch.git 
-cd iTorch 
-luarocks make
-cd /root/torch
-
-
-#Run instead of jupyter notebook
-itorch notebook --ip=0.0.0.0 --port=8888 --no-browser
 
 eventually, we'll need to set up password/certificate
 google "jupyter notebook --generate-config"; itorch notebook will have similar setting
 http://jupyter-notebook.readthedocs.io/en/latest/public_server.html
 
+```
+
+Modified and saved in my own docker image: 
+```
+docker run -it kaixhin/cuda-torch
+
+apt-get update && apt-get install -y \
+    software-properties-common \
+    git \
+    wget \
+    libzmq3-dev \
+    libssl-dev \
+    python-zmq
+cd /root
+wget -q https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh -b -p /opt/conda
+echo "export PATH=/opt/conda:\$PATH" >> /root/.bashrc
+git clone https://github.com/facebook/iTorch.git 
+cd iTorch
+luarocks make
+cd /root/torch
+
+docker commit -m "added itorch to kaixhin/cuda-torch" -a "jcx9dy" <container id> jfx319/cuda-torch:latest
+
+nvidia-docker run -it --rm -p 8888:8888 -v '/home/jcx9dy/Dropbox/Classes/Fall2016/Vicente/labs/tmp:/root/dev' -w /root/dev jfx319/cuda-torch:latest itorch notebook --ip=0.0.0.0 --port=8888 --no-browser
 ```
 
 
