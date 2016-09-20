@@ -63,10 +63,19 @@ Once you've finished installing nvidia driver and nvidia-docker, run:
 ```
 nvidia-docker run -it --rm -p 8888:8888 kaixhin/cuda-torch
 
-Then run jupyter notebook --ip="0.0.0.0" --no-browser to open a notebook on localhost:8888.
+#need to install itorch kernel (not included in kaixhin's container)
+cd /root 
+git clone https://github.com/facebook/iTorch.git 
+cd iTorch 
+luarocks make
+cd /root/torch
 
-python kernel not found
-need to install itorch kernel (not included in kaixhin's container)
+#Run instead of jupyter notebook
+itorch notebook --ip=0.0.0.0 --port=8888 --no-browser
+
+eventually, we'll need to set up password/certificate
+google "jupyter notebook --generate-config"; itorch notebook will have similar setting
+http://jupyter-notebook.readthedocs.io/en/latest/public_server.html
 
 ```
 
