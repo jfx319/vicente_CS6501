@@ -97,7 +97,14 @@ nvidia-docker run -it --rm -p 8888:8888 -v '/home/jcx9dy/Dropbox/Classes/Fall201
 ```
 
 
-To run torch in cuda:  
+## To run torch in cuda:  
+```
+require 'cutorch'
+require 'cudnn'
+
+model:cuda()
+model = cudnn.convert(model, cudnn)
+```
 http://kbullaughey.github.io/lstm-play/2015/09/21/torch-and-gpu.html
 
 Helpful notes:
