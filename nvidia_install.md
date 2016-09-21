@@ -97,6 +97,14 @@ nvidia-docker run -it --rm -p 8888:8888 -v '/home/jcx9dy/Dropbox/Classes/Fall201
 ```
 
 
+To run torch in cuda:  
+http://kbullaughey.github.io/lstm-play/2015/09/21/torch-and-gpu.html
+
+
+
+
+
+
 
 
 ### A useful guide for CUDA installation
