@@ -10,3 +10,22 @@ https://github.com/vdumoulin/conv_arithmetic
 
 
 
+
+Fast-RCNN example:  
+https://github.com/mahyarnajibi/fast-rcnn-torch
+
+deep dream example:  
+https://github.com/szagoruyko/DeepDream.torch?files=1
+returns multiple resolutions
+
+
+adversarial nets use gradient ascent on input rather than gradient descent on weights to try and change weights just the right way to get an wrong label
+
+
+Generative Adversarial networks:  
+
+how to change the output weights of an adversarial "generator" network to make it a better adversary. the adversary's output is added as a "delta" to the input image to a discriminator network. 
+
+GAN: generative adversarial networks, regarded by Yann LeCunn as most important breakthrough. invented by ian goodfellow
+
+
