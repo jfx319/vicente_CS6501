@@ -2,17 +2,32 @@
 # GPU on Rivanna
 
 
-#### Default GPU Specs 
-NVIDIA Driver = 361.93.02  
-Tesla K20m = 4743MiB Video RAM,  2496 cuda cores  
-
+#### GPU Queue
 
 ```
-udc-ba33-37: 102 $ ijob -A ratan -p gpu -c 1 -t 00:10:00
+Queue        Availability  Time     Queue    Maximum    Maximum    Idle   SU     Usable              
+(partition)  (idle%)       Limit    Limit    Cores/Job  Mem/Core   Nodes  Rate   Accounts            
+largemem     61(95.3%)     7-days   none     16         n/a        3      1.00   ratan bds_tg        
+serial       3621(75.4%)   7-days   none     20         6-GB       165    1.00   ratan bds_tg        
+parallel     3621(75.4%)   2-days   none     1000       6-GB       165    1.00   ratan bds_tg        
+economy      897(74.5%)    7-days   none     n/a        n/a        56     0.25   ratan bds_tg        
+gpu          32(100.0%)    5-days   none     32         16-GB      2      1.00   ratan bds_tg    
+
+
+ijob -A ratan -p gpu -c 1 -t 00:10:00
+
 salloc: Pending job allocation 2534844
 salloc: job 2534844 queued and waiting for resources
 salloc: job 2534844 has been allocated resources
 salloc: Granted job allocation 2534844
+```
+
+
+#### Default GPU Specs 
+NVIDIA Driver = 361.93.02  
+Tesla K20m = 4743MiB Video RAM,  2496 cuda cores  
+
+```
 udc-ba30-5: 1 $ which nvidia-smi
 /usr/bin/nvidia-smi
 udc-ba30-5: 2 $ nvidia-smi
@@ -37,7 +52,7 @@ Fri Sep 30 17:33:00 2016
 
 
 
-#### Default 16 CPU cores
+#### Default 16 CPU cores, 264 GB RAM
 ```
 udc-ba30-5: 3 $ top
 
