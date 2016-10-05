@@ -33,8 +33,8 @@ GAN: generative adversarial networks, regarded by Yann LeCunn as most important 
 
 ### Skip-Gram model Word-to-Vec Embedding
 
-http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-model/
-
+http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-model/  
+https://github.com/dav/word2vec  
 
 
 
