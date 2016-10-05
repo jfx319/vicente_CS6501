@@ -42,8 +42,8 @@ http://www.cs.bham.ac.uk/~jxb/INC/l12.pdf
 
 ### RNN explained
 
-http://colah.github.io/posts/2015-08-Understanding-LSTMs/
-
+http://colah.github.io/posts/2015-08-Understanding-LSTMs/  
+http://www.scholarpedia.org/article/Recurrent_neural_networks  
 
 
 
