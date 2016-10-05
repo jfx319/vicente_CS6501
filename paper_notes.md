@@ -29,3 +29,21 @@ how to change the output weights of an adversarial "generator" network to make i
 GAN: generative adversarial networks, regarded by Yann LeCunn as most important breakthrough. invented by ian goodfellow
 
 
+
+
+### Skip-Gram model Word-to-Vec Embedding
+
+http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-model/
+
+
+
+
+
+
+### RNN explained
+
+http://colah.github.io/posts/2015-08-Understanding-LSTMs/
+
+
+
+
