@@ -14,6 +14,7 @@ https://github.com/vdumoulin/conv_arithmetic
  * https://colah.github.io/posts/2015-08-Backprop/  
  * https://colah.github.io/  
  * https://github.com/martinwicke/  
+ * https://github.com/soumith/convnet-benchmarks  
  * https://event.on24.com/eventRegistration/EventLobbyServlet?target=lobby20.jsp&eventid=1244624&sessionid=1&partnerref=lcwebpage&key=286042D537A45A41F7ECC947A3D2C193&eventuserid=153147306
 
 Graphs in torch: 
