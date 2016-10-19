@@ -8,6 +8,12 @@ https://github.com/vdumoulin/conv_arithmetic
 
 
 
+### Tensorflow Fuwen's lecture
+ * https://github.com/jimfleming/differentiation  
+ * http://cs231n.stanford.edu/slides/winter1516_lecture12.pdf  
+ * https://colah.github.io/posts/2015-08-Backprop/  
+ * https://colah.github.io/  
+
 
 
 
