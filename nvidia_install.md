@@ -155,6 +155,23 @@ $ sudo ./NVIDIA-Linux-x86_64-361.45.11.run
 
 
 
+## Deep Learning Docker Image with all major libraries
+Install Instrtuctions:  
+https://github.com/saiprashanths/dl-docker
+
+Run with:
+```bash
+nvidia-docker run -it -p 8888:8888 -p 6006:6006 -v /home/jcx9dy/Dropbox/Classes/Fall2016/Vicente/labs/keraslab/:/media/keraslab/ floydhub/dl-docker:gpu bash
+
+#change keras to tensorflow backend
+sed -i 's/theano/tensorflow/g' ~/.keras/keras.json
+  #"backend": "tensorflow"
+
+#start jupyter
+jupyter notebook
+```
+
+
 
 
 
