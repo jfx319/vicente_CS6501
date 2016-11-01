@@ -20,8 +20,8 @@ The meta-information about the case is contained in a separate (.ICS) text file 
 
 #### Sample Images
 
-Left: Normal {Volume: normal_01, Case: A-0002-1},   Right: Cancer {Volume: cancer_01, Case: B-3013-1}
-![](http://marathon.csee.usf.edu/Mammography/DDSM/thumbnails/normals/normal_01/case0002/A_0002_1.RIGHT_MLO.LJPEG.1_highpass.gif) ![](http://marathon.csee.usf.edu/Mammography/DDSM/thumbnails/cancers/cancer_01/case3013/B_3013_1.RIGHT_MLO.LJPEG.1_highpass.gif)
+Left: Cancer {Volume: cancer_01, Case: B-3013-1},   Right: Normal {Volume: normal_01, Case: A-0002-1}:  
+![](http://marathon.csee.usf.edu/Mammography/DDSM/thumbnails/cancers/cancer_01/case3013/B_3013_1.RIGHT_MLO.LJPEG.1_highpass.gif) __________ ![](http://marathon.csee.usf.edu/Mammography/DDSM/thumbnails/normals/normal_01/case0002/A_0002_1.RIGHT_MLO.LJPEG.1_highpass.gif) 
 
 
 #### Example overlay annotation:
