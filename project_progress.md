@@ -52,17 +52,15 @@ The numbers represent initial starting pixel (x, y) and 8-connectivity direction
 ```
 
 
-## Implemented Modules: 3-4 paragraphs for each module implemented
+## Implemented Modules: 
 
-#### Pre-processing modules:
-
-##### Image Decompression
+##### Pre-processing: Image Decompression
 Since the data is rather large, in a compressed and somewhat obscure/unwieldy format, there are many preprocessing steps required to convert the image into a format more suitable for input into the machine learning algorithm. Namely, the first module so far is for uncompressing the images, standardizing all images into 16-bit floating-point, single-channel pixel values and storing that on disk. This expansion requires a larger amount of space. I invested in a separate 4TB harddrive for storage of the raw-format data. Depending on computing needs (i.e. cloud), temporary online storage may be needed. I will be looking into setting up cloud storage very soon so that data ingress can proceed as model pipeline development continues.
 
-##### Category parsing
+##### Pre-processing: Category parsing
 The various classification tasks require image categories to be parsed from the metadata files: tumor vs malignant, mass vs calcification, BIRADS score (1-5), mass annotation (e.g. "spiculated"). Although the baseline task is simply binary classification: benign vs malignant; it is easy to code up extracting these other categories so that they may be later used for additional tasks. 
 
-##### Ground-truth Mask Reconstruction
+##### Pre-processing: Ground-truth Mask Reconstruction
 Because the overlay files specify tumor locations as a boundary file, these boundaries must be converted into a filled-in boolean mask so that internal pixels of the tumor can also be later referenced. This tumor pixel-wise segmentation task will be an extra task beyond the baseline classification task. 
 
 ##### Neural Network architecture
@@ -78,7 +76,7 @@ The dataset comes with a target ROC performance result using previously publishe
 Time permitting, I wish to also implement a way of visualizing the learned layers to see what various layers are "seeing" and visualizing which subpatches or regions are contributing to the confidence of each classification. 
 
 
-## Pending work (clear direction): 
+## Pending Work (clear direction): 
 The model code has been demo'd in keras + tensorflow following previous example documentation. Training is very slow without gpu access, so current priority is to obtain gpu testing on UVA's resources such as the CS gpu cluster or HPC. If these are difficult or too busy, I plan on investing in some cloud credits on Amazon. 
 
 ## Remaining Challenges (unclear direction):
