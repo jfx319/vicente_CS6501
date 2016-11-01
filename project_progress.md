@@ -57,25 +57,30 @@ The numbers represent initial starting pixel (x, y) and 8-connectivity direction
 #### Pre-processing modules:
 
 ##### Image Decompression
-Since the data is rather large, in a compressed and somewhat obscure/unwieldy format, there are many preprocessing steps required to convert the image into a format more suitable for input into the machine learning algorithm. Namely, the first module so far is for uncompressing the images, converting into 16-bit floating-point, single-channel pixel values and storing that on disk. This expansion requires a larger amount of space. I invested in a separate 4TB harddrive for storage of the raw-format data. Depending on computing needs (i.e. cloud), temporary online storage may be needed. I will be looking into setting up cloud storage very soon so that data ingress (which could take a while) can proceed as model pipeline development continues.
+Since the data is rather large, in a compressed and somewhat obscure/unwieldy format, there are many preprocessing steps required to convert the image into a format more suitable for input into the machine learning algorithm. Namely, the first module so far is for uncompressing the images, standardizing all images into 16-bit floating-point, single-channel pixel values and storing that on disk. This expansion requires a larger amount of space. I invested in a separate 4TB harddrive for storage of the raw-format data. Depending on computing needs (i.e. cloud), temporary online storage may be needed. I will be looking into setting up cloud storage very soon so that data ingress can proceed as model pipeline development continues.
+
+##### Category parsing
+The various classification tasks require image categories to be parsed from the metadata files: tumor vs malignant, mass vs calcification, BIRADS score (1-5), mass annotation (e.g. "spiculated"). Although the baseline task is simply binary classification: benign vs malignant; it is easy to code up extracting these other categories so that they may be later used for additional tasks. 
 
 ##### Ground-truth Mask Reconstruction
-Since the overlay files specify anomalous tumor locations as a boundary file, these boundaries must be converted into a boolean mask. 
+Because the overlay files specify tumor locations as a boundary file, these boundaries must be converted into a filled-in boolean mask so that internal pixels of the tumor can also be later referenced. This tumor pixel-wise segmentation task will be an extra task beyond the baseline classification task. 
+
+##### Neural Network architecture
+The model architecture is based on the original paper with 5 convolutional layers and is implemented in keras + tensorflow with ReLU activations, max pooling, batch normalization and dropout. An additional softmax layer is used for final categorical classification, which in the case of two classes will be equivalent to a logistic regression. 
+
+##### Evaluation
+For baseline classification, it is fairly straightforward to evaluate the confusion table and compute simple statistics like accuracy, etc. For the additional tasks such as for pixel-wise segmentation, other measures such as AuROC (area under the receiver-operating curve) will be implemented. 
+
+##### Visuzliation module: 
+Time permitting, I wish to also implement a way of visualizing the learned layers to see what various layers are "seeing" and visualizing which subpatches or regions are contributing to the confidence of each classification. 
 
 
+## Pending work (clear direction): 
+The model code has been demo'd in keras + tensorflow following previous example documentation. Training is very slow without gpu access, so current priority is to obtain gpu testing on UVA's resources such as the CS gpu cluster or HPC. If these are difficult or too busy, I plan on investing in some cloud credits on Amazon. 
 
-#### Neural Network module: 
+## Remaining Challenges (unclear direction):
 
+I haven't fully figured out is how to normalize the data because they aren't all collected with identical equipment. For example there are at least three types of imagers: DBA, HOWTEK, and LUMISYS scanners representing 16bit/42microns, 12bit/43.5microns, 12bit/50microns, respectively. I wouldn't want there to be an artifact in the data for the algorithm to learn on (or "cheat"). 
 
-
-## Pending work (clear direction): 1 paragraph
-
-
-## Remaining Challenges (unclear direction)
-
-I haven't fully figured out is how to normalize the data because they aren't all collected with identical equipment. For example there are at least three types of imagers: DBA, HOWTEK, and LUMISYS scanners representing 16bit/42microns, 12bit/43.5microns, 12bit/50microns, respectively. I wouldn't want there to be an artifact in the data for the algorithm to learn on. 
-
-There are many annotations that, time permitting, may require flagging images for removal or special handling. As an example, one image has warning: "The LEFT_CC image has a scanner artifact in it. The rollers slipped while the image was scanning. That is why the letters look distorted."
-
-
+There are many annotations that, time permitting, may require flagging images for removal or special handling. As an example, one image warns: "The LEFT_CC image has a scanner artifact in it. The rollers slipped while the image was scanning. That is why the letters look distorted." Such is the tradeoff when working with real-world data. 
 
