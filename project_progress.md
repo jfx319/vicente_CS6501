@@ -4,7 +4,10 @@
 
 ## Summary: 
 
-Using Deep Convolutional Neural Networks to Predict Semantic Features of Lesions in Mammograms
+This project's baseline aim is to replicate Vibhu Agarwal's and Clayton Carson's paper "Using Deep Convolutional Neural Networks to Predict Semantic Features of Lesions in Mammograms". Time permitting, additional tasks and/or datasets may also be explored and compared. The baseline task is classifying mammography X-ray images into malignant or benign by employing a neural network with 5 convolutional layers to learn deep image features. In total, the dataset consists of 2620 cases (695 normal, 870 benign, 914 cancer, 141 benign with callback), collectively totalling 8752 images with pixel masks overlay files. Although not huge when comparing with other machine learning image datasets, it is one of the largest available datasets in the medical imaging field; thus, it is hoped that these are sufficient to yield promising proof-of-concept results.
+
+Current status:  Data has been acquired and mostly preprocessed (some advanced normalization steps and manual curation are still being thought out). Model is being coded up in keras+tensorflow and initial testing will begin shortly. In parallel, due to the anticipated size/complexity of training, additional compute resources are being explored such as the economic feasibility of cloud gpu instances. Working as a team of only one, there is more efficiency in decision making, but slower throughput in terms of implementation. 
+
 
 ## Data Collected: 
 Of the initial candidate datasets from the project proposal, I chose to proceed with the Digital Database for Screening Mammography (DDSM), a collaborative effort between Massachusetts General Hospital, Sandia National Laboratories, and the University of South Florida Computer Science and Engineering Department. This is the largest public dataset I could find. The data is a mixture of normal, benign, and cancer volumes selected and digitized specifically for DDSM.
