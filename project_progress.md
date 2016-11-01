@@ -4,15 +4,24 @@
 
 ## Summary: 
 
-
+Using Deep Convolutional Neural Networks to Predict Semantic Features of Lesions in Mammograms
 
 ## Data Collected: 
 Of the initial candidate datasets from the project proposal, I chose to proceed with the Digital Database for Screening Mammography (DDSM), a collaborative effort between Massachusetts General Hospital, Sandia National Laboratories, and the University of South Florida Computer Science and Engineering Department. This is the largest public dataset I could find. The data is a mixture of normal, benign, and cancer volumes selected and digitized specifically for DDSM.
 
+#### Data statistics
+
+Each of the 2,620 cases contains at least four 25MB images in lossless jpeg (.LJPEG) format. 
+
+The meta-information about the case is contained in a separate (.ICS) text file which contains image technical details (relevant for normalization) and additional useful diagnostic "features" such as ACR breast tissue density rating of 1 to 4 as assessed by an expert radiologist (note: tissue density is known to affect diagnostic interpretability).
+
+#### Normal Example {Volume: normal_01, Case: A-0002-1}:
+![](http://marathon.csee.usf.edu/Mammography/DDSM/thumbnails/normals/normal_01/case0002/A_0002_1.RIGHT_MLO.LJPEG.1_highpass.gif)
+
 #### Cancer Example {Volume: cancer_01, Case: B-3013-1}:
 ![](http://marathon.csee.usf.edu/Mammography/DDSM/thumbnails/cancers/cancer_01/case3013/B_3013_1.RIGHT_MLO.LJPEG.1_highpass.gif)
 
-#### Example annotation:
+#### Example overlay annotation:
 FILE: B_3013_1.RIGHT_MLO.OVERLAY  
 TOTAL_ABNORMALITIES 2  
 ABNORMALITY 1  
@@ -28,20 +37,33 @@ ASSESSMENT 5
 SUBTLETY 5  
 **PATHOLOGY MALIGNANT**  
 TOTAL_OUTLINES 1  
-BOUNDARY  
-
-
-
-
-http://marathon.csee.usf.edu/Mammography/DDSM/thumbnails/normals/normal_01/case0152/A_0152_1.RIGHT_CC.LJPEG.1_highpass.gif
-
-
-
+```
+BOUNDARY
+1752 1536 4 4 4 4 4 4 4 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 5 5 5 5 5 5 5 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 6 6 6 6 6 6 6 6 6 5 6 5 6 5 6 5 6 5 6 5 6 5 6 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 6 6 6 6 6 6 6 6 4 4 4 4 4 4 4 4 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 5 6 6 5 6 6 5 6 6 5 6 6 5 6 6 5 6 6 5 6 6 5 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 5 6 5 6 5 6 5 6 5 6 5 6 5 6 5 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 5 6 5 6 5 6 5 6 5 6 5 6 5 6 5 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 6 6 6 6 6 6 6 6 4 4 4 4 4 4 4 4 6 6 6 6 6 6 6 6 4 4 4 4 4 4 4 4 5 5 5 5 5 5 5 5 4 4 4 4 4 4 4 4 5 5 5 5 5 5 5 5 4 4 4 4 4 4 4 4 5 5 5 5 5 5 5 5 4 4 4 4 4 4 4 4 5 5 5 5 5 5 5 5 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 5 5 5 5 5 5 5 5 4 4 4 4 4 4 4 4 5 5 5 5 5 5 5 5 4 4 4 4 4 4 4 4 5 5 5 5 5 5 5 5 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 5 5 5 5 5 5 5 5 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 5 5 5 5 5 5 5 5 4 4 4 4 4 4 4 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 6 6 6 6 6 6 6 6 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 2 2 2 2 2 2 2 0 0 0 0 0 0 0 0 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 0 0 0 0 0 0 0 0 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 2 2 2 2 2 2 2 2 0 0 0 0 0 0 0 0 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 2 2 2 2 2 2 2 2 0 0 0 0 0 0 0 0 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 0 0 0 0 0 0 0 0 2 2 2 2 2 2 2 2 0 0 0 0 0 0 0 0 2 2 2 2 2 2 2 2 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 6 6 6 6 6 6 6 6 0 0 0 0 0 0 0 0 6 6 6 6 6 6 6 6 0 0 0 0 0 0 0 0 6 6 6 6 6 6 6 6 7 7 7 7 7 7 7 7 6 6 6 6 6 6 6 6 7 7 7 7 7 7 7 7 7 7 6 7 7 6 7 7 6 7 7 6 7 7 6 7 7 6 7 7 6 7 7 6 #
+```
+The numbers represent initial starting pixel (x, y) and 8-connectivity direction of the next neighboring boundary pixel as follows: 
+```
+7 0 1
+6 x 2
+5 4 3
+```
 
 
 ## Implemented Modules: 3-4 paragraphs for each module implemented
 
-## Preliminary results 1-3 paragraphs + figure + output results
+#### Pre-processing modules:
+
+##### Image Decompression
+Since the data is rather large, in a compressed and somewhat obscure/unwieldy format, there are many preprocessing steps required to convert the image into a format more suitable for input into the machine learning algorithm. Namely, the first module so far is for uncompressing the images, converting into 16-bit floating-point, single-channel pixel values and storing that on disk. This expansion requires a larger amount of space. I invested in a separate 4TB harddrive for storage of the raw-format data. Depending on computing needs (i.e. cloud), temporary online storage may be needed. I will be looking into setting up cloud storage very soon so that data ingress (which could take a while) can proceed as model pipeline development continues.
+
+##### Ground-truth Mask Reconstruction
+Since the overlay files specify anomalous tumor locations as a boundary file, these boundaries must be converted into a boolean mask. 
+
+
+
+#### Neural Network module: 
+
+
 
 ## Pending work (clear direction): 1 paragraph
 
