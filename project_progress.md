@@ -18,11 +18,11 @@ Each of the 2,620 cases contains at least four 25MB images in lossless jpeg (.LJ
 
 The meta-information about the case is contained in a separate (.ICS) text file which contains image technical details (relevant for normalization) and additional useful diagnostic "features" such as ACR breast tissue density rating of 1 to 4 as assessed by an expert radiologist (note: tissue density is known to affect diagnostic interpretability).
 
-#### Normal Example {Volume: normal_01, Case: A-0002-1}:
-![](http://marathon.csee.usf.edu/Mammography/DDSM/thumbnails/normals/normal_01/case0002/A_0002_1.RIGHT_MLO.LJPEG.1_highpass.gif)
+#### Sample Images
 
-#### Cancer Example {Volume: cancer_01, Case: B-3013-1}:
-![](http://marathon.csee.usf.edu/Mammography/DDSM/thumbnails/cancers/cancer_01/case3013/B_3013_1.RIGHT_MLO.LJPEG.1_highpass.gif)
+Left: Normal {Volume: normal_01, Case: A-0002-1},   Right: Cancer {Volume: cancer_01, Case: B-3013-1}
+![](http://marathon.csee.usf.edu/Mammography/DDSM/thumbnails/normals/normal_01/case0002/A_0002_1.RIGHT_MLO.LJPEG.1_highpass.gif) ![](http://marathon.csee.usf.edu/Mammography/DDSM/thumbnails/cancers/cancer_01/case3013/B_3013_1.RIGHT_MLO.LJPEG.1_highpass.gif)
+
 
 #### Example overlay annotation:
 FILE: B_3013_1.RIGHT_MLO.OVERLAY  
@@ -71,7 +71,10 @@ The model architecture is based on the original paper with 5 convolutional layer
 ##### Evaluation
 For baseline classification, it is fairly straightforward to evaluate the confusion table and compute simple statistics like accuracy, etc. For the additional tasks such as for pixel-wise segmentation, other measures such as AuROC (area under the receiver-operating curve) will be implemented. 
 
-##### Visuzliation module: 
+The dataset comes with a target ROC performance result using previously published algorithm: 
+![](http://marathon.csee.usf.edu/Mammography/DDSM/BCRP/FROC_AFUM.gif)
+
+##### Visualization module: 
 Time permitting, I wish to also implement a way of visualizing the learned layers to see what various layers are "seeing" and visualizing which subpatches or regions are contributing to the confidence of each classification. 
 
 
