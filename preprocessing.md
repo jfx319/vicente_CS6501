@@ -55,6 +55,9 @@ grep 'FILENAME LINES' | awk '{print $2 " " $5}'
 #from cygwin or linux: imagemagick 
 /usr/bin/convert.exe C_0029_1.LEFT_CC.LJPEG.1-ddsmraw2pnm.pnm PNGFiles/C_0029_1.LEFT_CC.png
 
+### DELETE INTERMEDIATES
+rm C_0029_1.LEFT_CC.LJPEG.1
+rm C_0029_1.LEFT_CC.LJPEG.1-ddsmraw2pnm.pnm
 
 ```
 
