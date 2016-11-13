@@ -24,7 +24,39 @@ At least 4 of these (representing each breast, and each view) per case. Some cas
 
 Data descriptor is here:  http://marathon.csee.usf.edu/Mammography/DDSM/case_description.html#ALLFILES
 
-Step 1:  Uncompress
+Convert to PNG
+```bash
+#this executable only has ".exe" so that windows users recognize it as such (nonetheless, is a linux binary, so cygwin/bash needed)
+./jpeg.exe -d -s C_0029_1.LEFT_CC.LJPEG
+#creates a ".1" RAW format file "C_0029_1.LEFT_CC.LJPEG.1"
+
+#convert .1 RAW format to PGM format, normalizing with scanner tech
+./ddsmraw2pnm.exe C_0029_1.LEFT_CC.LJPEG.1 4648 2672 lumisys
+  #output:  "C_0029_1.LEFT_CC.LJPEG.1-ddsmraw2pnm.pnm"
+  
+grep 'DIGITIZER' | awk '{print $2}'
+#DBA scanner at MGH   ('A' and DBA)
+#HOWTEK scanner at MGH   ('A' and HOWTEK)
+#LUMISYS scanner at Wake Forest University   ('B' or 'C' and LUMISYS)
+#HOWTEK scanner at ISMD   ('D' and HOWTEK)
+
+#executable options:
+ #'howtek-mgh'
+ #'howtek-ismd'
+ #'lumisys'
+ #'dba'
+
+#Example ICS line specifying image dimensions:
+grep 'FILENAME LINES' | awk '{print $2 " " $5}'
+ #LEFT_CC LINES 4648 PIXELS_PER_LINE 2672 
+
+
+
+#from cygwin or linux: imagemagick 
+/usr/bin/convert.exe C_0029_1.LEFT_CC.LJPEG.1-ddsmraw2pnm.pnm PNGFiles/C_0029_1.LEFT_CC.png
+
+
+```
 
 
 ### ICS
