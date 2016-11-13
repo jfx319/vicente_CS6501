@@ -59,6 +59,8 @@ grep 'FILENAME LINES' | awk '{print $2 " " $5}'
 rm C_0029_1.LEFT_CC.LJPEG.1
 rm C_0029_1.LEFT_CC.LJPEG.1-ddsmraw2pnm.pnm
 
+
+#http://stackoverflow.com/questions/27934784/shell-script-to-loop-and-start-processes-in-parallel
 ```
 
 
