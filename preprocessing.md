@@ -5,13 +5,12 @@ In theory, software is provided with the dataset. However, these are c code comp
 The alternative, is looking around for someone else's implementation of DDSM conversion, since this is a very old dataset and there have been papers published. Google "ddsm github"
 
 Options:
- - https://github.com/trane293/DDSMUtility
+ - Actually used this one with cygwin + matlab:  https://github.com/trane293/DDSMUtility
+   - but can also use linux equivalent functions (as noted below); would need to write ics parser from scratch, hence the lazy option of just going with 4 simultaneous instances of matlab (~2 days)
  - https://github.com/multinormal/ddsm
  - https://github.com/trane293/DDSM-Software-Chris-Rose/tree/master/DDSM-Software
  - https://github.com/wakahiu/ddsm-converter
  - http://stackoverflow.com/questions/13365587/getting-data-from-digital-database-for-screening-mammography-ddsm
- 
- 
 
 ### PGM 
 Can probably ignore these. Haven't really figured out image details. ImageJ can open it, but there seems to be endian-related byte-size artifact (I recall this from peter's hw)?
