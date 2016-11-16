@@ -8,6 +8,7 @@ Options:
  - Actually used this one with cygwin + matlab:  https://github.com/trane293/DDSMUtility
    - but can also use linux equivalent functions (as noted below); would need to write ics parser from scratch, hence the lazy option of just going with 4 simultaneous instances of matlab (~2 days)
  - https://github.com/multinormal/ddsm
+   - used the `get_ddsm_groundtruth.m` from this repo for generating masks
  - https://github.com/trane293/DDSM-Software-Chris-Rose/tree/master/DDSM-Software
  - https://github.com/wakahiu/ddsm-converter
  - http://stackoverflow.com/questions/13365587/getting-data-from-digital-database-for-screening-mammography-ddsm
@@ -109,8 +110,49 @@ I'd want to have a python implementation:
 https://docs.scipy.org/doc/scipy-0.16.0/reference/generated/scipy.ndimage.morphology.binary_fill_holes.html
 
 
+Another [matlab repo](https://github.com/multinormal/ddsm/blob/master/ddsm-software/get_ddsm_groundtruth.m)
+```matlab
+overlays = get_ddsm_groundtruth('cancer_10\case1580\A_1580_1.LEFT_MLO.OVERLAY')
+% overlays = 
+%    [1x1 struct]    [1x1 struct]
 
+length(overlays)
+% ans =
+%     2
 
+overlays{1}
+% ans = 
+%    lesion_type: {'MASS SHAPE IRREGULAR MARGINS ILL_DEFINED'}
+%     assessment: 4
+%       subtlety: 3
+%      pathology: 'MALIGNANT'
+%    annotations: [1x1 struct]
+
+overlays{2}
+% ans = 
+%    lesion_type: {'CALCIFICATION TYPE PLEOMORPHIC DISTRIBUTION CLUSTERED'}
+%     assessment: 4
+%       subtlety: 2
+%      pathology: 'MALIGNANT'
+%    annotations: [1x1 struct]
+
+overlays{1}.annotations
+% ans = 
+%    boundary: @(image_dims)make_annotation_image(image_dims,bc_text{i})
+%       cores: {[@(image_dims)make_annotation_image(image_dims,bc_text{i})]}
+
+length(overlays{1}.annotations.cores)
+% ans =
+%     1
+
+%%% It's kinda dumb that the author didn't put image dimensions already in the groundtruth matlab structure; have to manually get it
+boundary_annotation = overlays{1}.annotations.boundary([4606 2221]);
+imagesc(boundary_annotation)
+
+%%% this seems to give an identical picture to the boundary?? 
+imagesc(overlays{1}.annotations.cores{1}([4606 2221]))
+
+```
 
 
 
