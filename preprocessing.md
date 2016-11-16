@@ -154,6 +154,10 @@ imagesc(overlays{1}.annotations.cores{1}([4606 2221]))
 
 ```
 
+Current remote access: 
+```
+ssh jcx9dy@128.143.129.160:/media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/done
 
+```
 
 
