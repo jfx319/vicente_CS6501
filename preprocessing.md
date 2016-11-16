@@ -20,7 +20,38 @@ Can probably ignore these. Haven't really figured out image details. ImageJ can 
 
 
 ### LJPEG
-At least 4 of these (representing each breast, and each view) per case. Some cases have more?
+At exactly 4 of these (representing each breast, and each view) per case.  
+
+In retrospect, the ftp sync missed 3 files which can be addressed as follows:  
+```bash
+ls -1 figment.csee.usf.edu/pub/DDSM/cases/done/*/case*/PNGFiles/*.LJPEG | wc-l
+ls -1 figment.csee.usf.edu/pub/DDSM/cases/done/*/case*/PNGFiles/*.png | wc-l
+# 10405 pictures, should be 10408 = 2602 cases (website claims "2620 cases available in 43 volumes" --> typo?)
+
+cd figment.csee.usf.edu/pub/DDSM/cases/
+for dir in `/usr/bin/find.exe ./done -mindepth 3 -type d`; do
+  if [ `ls -1 ${dir} | wc -l` -ne "4" ]; then
+    echo ${dir}
+  fi
+done | tee weird_pngfolders.txt
+
+
+### some ljpeg /overlay were .gz'd
+#benign_01\case3102
+for gzfile in `ls -1 ./set1/*/case*/*.gz`; do
+  gunzip $gzfile
+done
+
+#benign_10\case4164
+#missing one ljpeg file, manually retrieve from:  
+wget ftp://figment.csee.usf.edu/pub/DDSM/cases/benigns/benign_10/case4164/D_4164_1.LEFT_MLO.LJPEG
+
+#cancer_09\case3407
+#missing one ljpeg file, manually retrieve from:  
+wget ftp://figment.csee.usf.edu/pub/DDSM/cases/cancers/cancer_09/case3407/B_3407_1.RIGHT_CC.LJPEG
+```
+
+
 
 Data descriptor is here:  http://marathon.csee.usf.edu/Mammography/DDSM/case_description.html#ALLFILES
 
