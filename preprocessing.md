@@ -100,6 +100,29 @@ rm C_0029_1.LEFT_CC.LJPEG.1-ddsmraw2pnm.pnm
 Contains the clinical info and metadata
 
 
+### PATCHES
+
+How to generate patches? If we compute min/max pixel ranges of the border or mask (or is it also possible from chaincode?), then can draw a bounding box at those pixels. 
+
+Given these:  
+Chaincode
+
+Border/outline
+
+Mask (filled)
+
+
+Random Rotate, or just the typical 90deg
+
+random crop (after short side is resized to sufficient dimension) 
+
+Resize to 64x64 or 224x224, or 256x256, etc
+
+with 50,000 of 224x224 images, that's 10GB of raw byte size. 
+
+Alternative: if training on sufficiently small patches, is there a need to rescale the mass/tumor? what if random cropping from the mass already gives enough variety?
+
+
 ### OVERLAY
 
 Not all folders will have Overlay files
