@@ -102,6 +102,9 @@ Contains the clinical info and metadata
 
 ### PATCHES
 
+method 1:  http://cs231n.stanford.edu/reports/vibhua_final_report.pdf  
+method 2:  http://cs231n.stanford.edu/reports2016/306_Report.pdf  
+
 How to generate patches? If we compute min/max pixel ranges of the border or mask (or is it also possible from chaincode?), then can draw a bounding box at those pixels. 
 
 Given these:  
