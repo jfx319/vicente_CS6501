@@ -51,6 +51,26 @@ The numbers represent initial starting pixel (x, y) and 8-connectivity direction
 5 4 3
 ```
 
+#### BIRADS Code
+
+In the above example, the 'ASSESSMENT' = 5 and 'SUBTLETY' = 5. This represents the highest in both categories. 
+* SUBTLETY:  mammographer-assigned "subtlety rating" on a scale of 1 to 5, where 1 is "subtle" and 5 is "obvious."
+* ASSESSMENT:  ACR BI-RADS assessment code 
+
+Assessment refers to the American College of Radiology's Breast Imaging Reporting And Data System (ACR-BIRADS) code: 
+http://breast-cancer.ca/bi-rads/
+* BI-RADS category 0, not enough information yet to complete the process (e.g. need ultrasound to confirm birads 2)
+* BI-RADS category 1, nothing notable and/or no change from prev exam
+* BI-RADS category 2, definitive benign finding
+* BI-RADS category 3, very low positive predictive value (less than 2%),
+* BI-RADS category 4, PPV of ~30%
+  * subcategory 4A, PPV 13%  
+  * subcategory 4B, PPV 36% 
+  * subcategory 4C, PPV 79%
+* BI-RADS category 5, PPV of 95%
+* BI-RADS category 6, is for known cancer (often code used during followup)
+
+
 
 ## Implemented Modules: 
 
