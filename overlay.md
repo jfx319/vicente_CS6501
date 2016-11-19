@@ -94,8 +94,6 @@ In this case, there is one boundary, and 3 additional cores.
 Does this mean there is always one boundary per overlay file?
 
 
-
-
 ### PATHOLOGIES (there is sometimes more than one per overlay file)
 ```bash
 for f in `ls -1 ./done/*/case*/*.OVERLAY`; do 
@@ -107,6 +105,15 @@ sort PATHOLOGY.txt | uniq -c
 #   1935 MALIGNANT
 #     37 UNPROVEN
 #4664 TOTAL
+```
+
+### Anomalous files
+```bash
+#superfluous overlay file in wrong folder
+rm cancer_11/case1826/A_1585_1.RIGHT_MLO.OVERLAY
+
+#extra overlay file in wrong folder (and not expected in original folder metadata)
+rm cancer_03/case1059/A_1045_1.RIGHT_MLO.OVERLAY
 ```
 
 
