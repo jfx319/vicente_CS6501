@@ -114,6 +114,12 @@ rm cancer_11/case1826/A_1585_1.RIGHT_MLO.OVERLAY
 
 #extra overlay file in wrong folder (and not expected in original folder metadata)
 rm cancer_03/case1059/A_1045_1.RIGHT_MLO.OVERLAY
+
+#Some patients don't have an age
+grep -H -e '^PATIENT_AGE' ./done/*/*/*.ics | awk '{if (NF < 2)  print $0 }'
+./done/benign_08/case1735/A-1735-1.ics
+./done/cancer_10/case1621/A-1621-1.ics
+./done/cancer_10/case1654/A-1654-1.ics
 ```
 
 
