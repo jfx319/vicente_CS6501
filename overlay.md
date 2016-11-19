@@ -3,20 +3,15 @@ http://stackoverflow.com/questions/21878868/extracting-patches-of-a-certain-size
 
 backup plan: 
 
-for a given overlay file, 
-need code to parse corresponding ICS file and get boundaries
-
-create masks
-
 randomly select a pixel from mask, use as center of candidate patch; if candidate patch is >T% within mask, then accept as a usable patch -> rotate all directions, and mirror all directions. 
-
-
 
 
 just use benign tumor masses
 
 for normal:
 invert masks
+
+merge masks: [example](http://marathon.csee.usf.edu/Mammography/DDSM/thumbnails/cancers/cancer_04/case1045/A_1045_1.LEFT_CC.LJPEG.1_highpass.gif)
 
 
 
