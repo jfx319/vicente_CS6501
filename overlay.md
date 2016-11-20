@@ -115,6 +115,33 @@ grep -H -e '^PATIENT_AGE' ./done/*/*/*.ics | awk '{if (NF < 2)  print $0 }'
 ./done/benign_08/case1735/A-1735-1.ics
 ./done/cancer_10/case1621/A-1621-1.ics
 ./done/cancer_10/case1654/A-1654-1.ics
+
+
+#eleven chain codes out of bounds: 
+  #e.g. http://marathon.csee.usf.edu/Mammography/DDSM/thumbnails/benigns/benign_09/case4070/D-4070-1.html
+IndexError: index 2612 is out of bounds for axis 1 with size 2596
+IndexError: index 3406 is out of bounds for axis 1 with size 3406
+IndexError: index 1846 is out of bounds for axis 1 with size 1846
+IndexError: index 2461 is out of bounds for axis 1 with size 2461
+IndexError: index 2287 is out of bounds for axis 1 with size 2281
+IndexError: index 2139 is out of bounds for axis 1 with size 2131
+IndexError: index 2521 is out of bounds for axis 1 with size 2521
+IndexError: index 2705 is out of bounds for axis 1 with size 2701
+IndexError: index 2102 is out of bounds for axis 1 with size 2086
+IndexError: index 1997 is out of bounds for axis 1 with size 1981
+IndexError: index 2057 is out of bounds for axis 1 with size 2041
 ```
 
+### Download thumbnails
+Unfinished code:
+```bash
 
+target:  http://marathon.csee.usf.edu/Mammography/DDSM/thumbnails/cancers/cancer_01/case3013/B_3013_1.RIGHT_MLO.LJPEG.1_highpass.gif
+
+./done/benign_04/case0334/C_0334_1.RIGHT_CC.OVERLAY:TOTAL_OUTLINES 2
+
+grep 'TOTAL_OUTLINES 2' excess_outlines.txt | cut -f1 -d':' | awk -F'.' 
+
+ | awk -F'_' '{print "http://marathon.csee.usf.edu/Mammography/DDSM/thumbnails/" $1 "s/" $1 "_" $2 "-" $3 "-" $4 ".html"}' > verify2.txt
+
+```
