@@ -122,6 +122,11 @@ random crop (after short side is resized to sufficient dimension)
 Resize to 64x64 or 224x224, or 256x256, etc
 
 with 50,000 of 224x224 images, that's 10GB of raw byte size. 
+https://keras.io/applications/#inceptionv3
+https://keras.io/preprocessing/image/
+
+
+
 
 Alternative: if training on sufficiently small patches, is there a need to rescale the mass/tumor? what if random cropping from the mass already gives enough variety?  
 recent mitharvard technique: https://arxiv.org/pdf/1606.05718v1.pdf
