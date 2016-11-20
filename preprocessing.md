@@ -122,9 +122,9 @@ random crop (after short side is resized to sufficient dimension)
 Resize to 64x64 or 224x224, or 256x256, etc
 
 with 50,000 of 224x224 images, that's 10GB of raw byte size. 
-https://keras.io/applications/#inceptionv3
-https://keras.io/preprocessing/image/
-
+https://keras.io/applications/#inceptionv3  
+https://keras.io/preprocessing/image/  
+https://gist.github.com/fchollet/0830affa1f7f19fd47b06d4cf89ed44d  
 
 
 
