@@ -126,10 +126,33 @@ https://keras.io/applications/#inceptionv3
 https://keras.io/preprocessing/image/  
 https://gist.github.com/fchollet/0830affa1f7f19fd47b06d4cf89ed44d  
 
-
-
 Alternative: if training on sufficiently small patches, is there a need to rescale the mass/tumor? what if random cropping from the mass already gives enough variety?  
 recent mitharvard technique: https://arxiv.org/pdf/1606.05718v1.pdf
+
+
+```bash
+cd /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases
+
+
+ls -1 ./done/*/*/*.OVERLAY > OVERLAY_files.txt
+
+parallel --eta -a OVERLAY_files.txt python3 generate_DDSMmasks.py {}
+# ~ 22min on 8 cores for just masks
+
+for dir in `cat OVERLAY_files.txt`; do
+  img=`basename ${dir} .OVERLAY`
+  path=`dirname ${dir}`
+  [ ! -f ${path}/masks/${img}.groundtruth.npy ] && echo ${dir}
+done
+
+
+parallel --joblog patches.log -a npyfiles.txt python3 generate_DDSMpatches.py {}
+cat patches.log | awk '{sum = sum + $4} END {print sum/NR}'
+#12.8146
+#~14hrs = 12.8146*4027/3600
+```
+
+
 
 ### OVERLAY
 
