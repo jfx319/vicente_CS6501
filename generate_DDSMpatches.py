@@ -102,14 +102,14 @@ for i, e in enumerate(groundtruth['BENIGN']):
     mask = imread(basepath + '/' + imagename + '_BENIGN' + str(i) + '.mask.png').astype('bool')
     patchlist = genPatches(mamm, mask, patchsize=101)
     for p in patchlist:
-        Image.fromarray(p['patch']).save(patchdir_benign + '/' + prefix + '-r'+str(p['row']) + '-c'+str(p['col']) + '.png')
+        Image.fromarray(p['patch']).save(patchdir_benign + '/' + prefix + '-m' + str(i) + '-r'+str(p['row']) + '-c'+str(p['col']) + '.png')
     
 for i, e in enumerate(groundtruth['MALIGNANT']):
     prefix = '-'.join([volumename, imagename, 'B'+str(e['ASSESSMENT']), 'D'+str(e['DENSITY']), 'A'+str(e['PATIENT_AGE']), 'S'+str(e['SUBTLETY'])]) 
     mask = imread(basepath + '/' + imagename + '_MALIGNANT' + str(i) + '.mask.png').astype('bool')
     patchlist = genPatches(mamm, mask, patchsize=101)
     for p in patchlist:
-        Image.fromarray(p['patch']).save(patchdir_malign + '/' + prefix + '-r'+str(p['row']) + '-c'+str(p['col']) + '.png')
+        Image.fromarray(p['patch']).save(patchdir_malign + '/' + prefix + '-m' + str(i) + '-r'+str(p['row']) + '-c'+str(p['col']) + '.png')
 
 #Can later load patches as follows: 
 #np.array(PIL.Image.open('patch.png'))
