@@ -62,4 +62,7 @@ http://colah.github.io/posts/2015-08-Understanding-LSTMs/
 http://www.scholarpedia.org/article/Recurrent_neural_networks  
 
 
+### Dynamic neural nets
+https://github.com/clab/dynet
+
 
