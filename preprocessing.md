@@ -151,13 +151,43 @@ cat patches.log | awk '{sum = sum + $4} END {print sum/NR}'
 #10.6768 sec avg, 4027 jobs
 #~1.5hrs = 10.6768*4027/3600/8
 
-cat patches.log | awk '{sum = sum + $7} END {print sum}'
-python3 generate_DDSMpatches.py ./done/benign_01/case3186/masks/B_3186_1.LEFT_MLO.groundtruth.npy
-python3 generate_DDSMpatches.py ./done/benign_01/case3186/masks/B_3186_1.RIGHT_MLO.groundtruth.npy
-python3 generate_DDSMpatches.py ./done/benign_01/case3186/masks/B_3186_1.RIGHT_CC.groundtruth.npy
+#look for failed jobs (bad exit code)
+cat patches.log | awk '{if ($7 != 0) print $0}'
 
-#Missing PNGFiles (but masks finished, as pngs weren't needed)
-./done/benign_01/case3186/
+
+
+######################### create keras data folder
+cd /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/patches/benign
+find /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/done -path "*/patch/benign/*.png" -exec ln -s {} . ';'
+ls -1 | wc -l
+#TOTAL 17498
+#B6 0
+#B5 130
+#B4 10999
+#B3 3859
+#B2 620
+#B1 0
+#B0 1890
+
+
+cd /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/patches/malignant
+find /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/done -path "*/patch/malignant/*.png" -exec ln -s {} . ';'
+ls -1 | wc -l
+#TOTAL  17819
+#B6 0
+#B5 6910
+#B4 8809
+#B3 1380
+#B2 20
+#B1 30
+#B0 670
+
+# 35317 patches (101x101 pixel) total, pretty evenly split
+
+
+cd /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/patches
+tar -czhf patches.tar.gz benign malignant
+# 547MB
 
 ```
 
