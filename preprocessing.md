@@ -153,14 +153,11 @@ cat patches.log | awk '{sum = sum + $4} END {print sum/NR}'
 
 cat patches.log | awk '{sum = sum + $7} END {print sum}'
 python3 generate_DDSMpatches.py ./done/benign_01/case3186/masks/B_3186_1.LEFT_MLO.groundtruth.npy
-#[Errno 2] No such file or directory: './done/benign_01/case3186/PNGFiles/B_3186_1.LEFT_MLO.png'
-
 python3 generate_DDSMpatches.py ./done/benign_01/case3186/masks/B_3186_1.RIGHT_MLO.groundtruth.npy
-#[Errno 2] No such file or directory: './done/benign_01/case3186/PNGFiles/B_3186_1.RIGHT_MLO.png'
-
 python3 generate_DDSMpatches.py ./done/benign_01/case3186/masks/B_3186_1.RIGHT_CC.groundtruth.npy
-#[Errno 2] No such file or directory: './done/benign_01/case3186/PNGFiles/B_3186_1.RIGHT_CC.png'
 
+#Missing PNGFiles (but masks finished, as pngs weren't needed)
+./done/benign_01/case3186/
 
 ```
 
