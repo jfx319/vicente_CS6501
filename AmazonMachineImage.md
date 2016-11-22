@@ -407,4 +407,40 @@ sudo pip install kerasvis
 
 
 
+# Keras 1.1.1 + Tensorflow 0.10 Docker Image
+Install Instrtuctions:  
+https://github.com/gw0/docker-keras
+
+Run with:
+```bash
+
+#python3 version
+nvidia-docker run -it -p 8888:8888 -p 6006:6006 -v /home/jcx9dy/proj/cs6501:/mnt/cs6501/ gw000/keras:1.1.1-py3-tf-gpu bash
+
+apt-get update
+apt-get install vim less wget
+
+#install jupyter
+pip3 install --upgrade pip
+pip3 install --upgrade numpy scipy pandas sklearn matplotlib Pillow jupyter
+
+ipython
+from notebook.auth import passwd
+passwd()
+'sha1:bcd259ccf...<your hashed password here>'
+exit()
+
+jupyter notebook --generate-config
+vim ~/.jupyter/jupyter_notebook_config.py
+# Set ip to '*' to bind on all interfaces (ips) for the public server
+c.NotebookApp.ip = '*'
+c.NotebookApp.password = u'sha1:bcd259ccf...<your hashed password here>'
+c.NotebookApp.open_browser = False
+c.NotebookApp.port = 8888
+
+#start jupyter
+jupyter notebook
+```
+
+
 
