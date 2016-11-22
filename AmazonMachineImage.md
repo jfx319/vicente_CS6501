@@ -77,6 +77,7 @@ Tue Nov 22 18:15:05 2016
 |  No running processes found                                                 |
 +-----------------------------------------------------------------------------+
 
+watch -n0.1 nvidia-smi
 
 
 ubuntu@ip-172-31-60-241:~$ top
@@ -415,7 +416,7 @@ Run with:
 ```bash
 
 #python3 version
-nvidia-docker run -it -p 8888:8888 -p 6006:6006 -v /home/jcx9dy/proj/cs6501:/mnt/cs6501/ gw000/keras:1.1.1-py3-tf-gpu bash
+nvidia-docker run -it -p 8888:8888 -p 6006:6006 -v /home/jcx9dy/proj/cs6501:/mnt/cs6501/ -w /mnt/cs6501 gw000/keras:1.1.1-py3-tf-gpu bash
 
 apt-get update
 apt-get install vim less wget
@@ -440,6 +441,16 @@ c.NotebookApp.port = 8888
 
 #start jupyter
 jupyter notebook
+#localhost:8888
+
+#commit docker image
+nvidia-docker commit -m "installed jupyter notebook and some python modules" -a "jcx9dy" <container id> jfx319/cs6501:keras1.1.1-py3-tf0.10-cuda7.5-cudnn5.1
+#for convenience also add 'latest' tag
+docker tag <image id> jfx319/cs6501:latest
+
+#optionally, push to public repo (but keep in mind jupyter pw/config will be exposed)
+docker login
+docker push 
 ```
 
 
