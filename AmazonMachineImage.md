@@ -451,6 +451,12 @@ docker tag <image id> jfx319/cs6501:latest
 #optionally, push to public repo (but keep in mind jupyter pw/config will be exposed)
 docker login
 docker push 
+
+
+## Test new image
+nvidia-docker run -d -p 8888:8888 -p 6006:6006 -v /home/jcx9dy/proj/cs6501:/mnt/cs6501/ -w /mnt/cs6501 jfx319/cs6501:latest bash
+  ##unstable if i just run "jupyter notebook" detached from docker cmd; more stable if i run bash first interactively starting jupyter notebook and then detaching from the docker container. 
+
 ```
 
 
