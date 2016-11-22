@@ -230,6 +230,8 @@ I tensorflow/core/common_runtime/gpu/gpu_device.cc:1041] Creating TensorFlow dev
 ubuntu@ip-172-31-60-241:~$ python ~/tensorflow/tensorflow/models/image/cifar10/cifar10_eval.py
 2016-11-22 19:53:21.111682: precision @ 1 = 0.827
 
+#copy model checkpoints to s3 (assumes aws config was set properly)
+aws s3 cp /tmp s3://cs6501/cifar10/ --recursive
 ```
 
 
@@ -268,6 +270,14 @@ enable port 80 for http
 enable port 443 for https
 ```
 
+
+
+Copy data to instance
+```
+aws s3 cp s3://cs6501/data/patches.tar.gz ~/data/
+tar -xzf ~/data/patches.tar.gz &
+
+```
 
 
 
