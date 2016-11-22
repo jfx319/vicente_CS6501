@@ -1,11 +1,17 @@
 Alternative:  use existing AMI
 
+benchmarking:  
+http://www.bitfusion.io/2016/11/03/quick-comparison-of-tensorflow-gpu-performance-on-aws-p2-and-g2-instances/
+
+
 http://www.bitfusion.io/2016/10/21/bitfusion-deep-learning-amis-now-available-on-aws-p2-instances/  
 http://www.bitfusion.io/2016/05/09/easy-tensorflow-model-training-aws/  
 https://github.com/bitfusionio/amis/tree/master/awsmrkt-bfboost-ubuntu14-cuda75-tensorflow  
-
-
-
+```bash
+US East (N. Virginia)	ami-bbd1e7ac
+```
+cuda 8.0  ,  16 GiB root volume that was sufficient for the installation
+http://expressionflow.com/2016/10/09/installing-tensorflow-on-an-aws-ec2-p2-gpu-instance/
 
 https://github.com/saiprashanths/dl-docker#specs
 
