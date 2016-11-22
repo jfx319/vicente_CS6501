@@ -53,24 +53,7 @@ We would love to hear from you! Contact us with any feedback or a feature reques
 ########################################################################################################################
 ########################################################################################################################
 
-
-
-########################################################################################################################
-########################################################################################################################
-
-                                           BITFUSION EMAIL OPT IN                                                       
-
-Register your email address to be entered into our monthly draw for Bitfusion t-shirts and  occasional hardware         
-goodies.  Additionally you will receive product updates and information about new offerings from Bitfusion.
-
-########################################################################################################################
-########################################################################################################################
-
-Would you like to register with Bitfusion.io? [y/n] n
-
-Thank you for using the Bitfusion Ubuntu 14 Tensorflow
-
-Please review the README located at /home/ubuntu/README for more details on how to use this AMI
+Last login: Tue Nov 22 18:14:28 2016 from d-128-143-129-160.dhcp.virginia.edu
 
 
 
@@ -161,6 +144,35 @@ ubuntu@ip-172-31-60-241:~$ python --version
 Python 2.7.6
 ubuntu@ip-172-31-60-241:~$ python3 --version
 Python 3.4.3
+
+
+python
+Python 2.7.6 (default, Jun 22 2015, 17:58:13) 
+[GCC 4.8.2] on linux2
+>>> import keras
+Using TensorFlow backend.
+I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcublas.so.7.5 locally
+I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcudnn.so.5 locally
+I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcufft.so.7.5 locally
+I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcuda.so.1 locally
+I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcurand.so.7.5 locally
+>>> print keras.__version__
+1.1.1
+
+
+python3
+Python 3.4.3 (default, Sep 14 2016, 12:36:27) 
+GCC 4.8.4] on linux
+>>> import keras
+Using TensorFlow backend.
+I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcublas.so.7.5 locally
+I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcudnn.so.5 locally
+I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcufft.so.7.5 locally
+I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcuda.so.1 locally
+I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcurand.so.7.5 locally
+>>> keras.__version__
+'1.1.1'
+
 
 
 ubuntu@ip-172-31-60-241:~$ python ~/tensorflow/tensorflow/models/image/cifar10/cifar10_multi_gpu_train.py
