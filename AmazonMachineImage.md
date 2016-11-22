@@ -163,9 +163,99 @@ ubuntu@ip-172-31-60-241:~$ python3 --version
 Python 3.4.3
 
 
+ubuntu@ip-172-31-60-241:~$ python ~/tensorflow/tensorflow/models/image/cifar10/cifar10_multi_gpu_train.py
+I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcublas.so.7.5 locally
+I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcudnn.so.5 locally
+I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcufft.so.7.5 locally
+I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcuda.so.1 locally
+I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcurand.so.7.5 locally
+>> Downloading cifar-10-binary.tar.gz 100.0%
+Successfully downloaded cifar-10-binary.tar.gz 170052171 bytes.
+Filling queue with 20000 CIFAR images before starting to train. This will take a few minutes.
+I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:925] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:951] Found device 0 with properties: 
+name: Tesla K80
+major: 3 minor: 7 memoryClockRate (GHz) 0.8235
+pciBusID 0000:00:1e.0
+Total memory: 11.25GiB
+Free memory: 11.13GiB
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:972] DMA: 0 
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] 0:   Y 
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:1041] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K80, pci bus id: 0000:00:1e.0)
+2016-11-22 18:29:20.997334: step 0, loss = 4.67 (2.1 examples/sec; 62.301 sec/batch)
+2016-11-22 18:29:23.064279: step 10, loss = 4.64 (840.6 examples/sec; 0.152 sec/batch)
+2016-11-22 18:29:24.643143: step 20, loss = 4.51 (826.9 examples/sec; 0.155 sec/batch)
+2016-11-22 18:29:26.254807: step 30, loss = 4.39 (770.8 examples/sec; 0.166 sec/batch)
+2016-11-22 18:29:27.873522: step 40, loss = 4.40 (770.2 examples/sec; 0.166 sec/batch)
+2016-11-22 18:29:29.533449: step 50, loss = 4.23 (766.2 examples/sec; 0.167 sec/batch)
+2016-11-22 18:29:31.175779: step 60, loss = 4.33 (825.3 examples/sec; 0.155 sec/batch)
+2016-11-22 18:29:32.838024: step 70, loss = 4.41 (788.5 examples/sec; 0.162 sec/batch)
+2016-11-22 18:29:34.486316: step 80, loss = 4.40 (790.2 examples/sec; 0.162 sec/batch)
+2016-11-22 18:29:36.158620: step 90, loss = 4.09 (744.8 examples/sec; 0.172 sec/batch)
+2016-11-22 18:29:37.821699: step 100, loss = 4.12 (766.1 examples/sec; 0.167 sec/batch)
+
+2016-11-22 18:29:54.621281: step 200, loss = 3.82 (783.4 examples/sec; 0.163 sec/batch)
+2016-11-22 18:30:11.167037: step 300, loss = 3.56 (774.1 examples/sec; 0.165 sec/batch)
+2016-11-22 18:30:27.910897: step 400, loss = 3.37 (763.4 examples/sec; 0.168 sec/batch)
+
+2016-11-22 18:30:44.432482: step 500, loss = 3.09 (766.8 examples/sec; 0.167 sec/batch)
+
+2016-11-22 18:32:07.944061: step 1000, loss = 2.53 (787.3 examples/sec; 0.163 sec/batch)
+2016-11-22 18:34:56.223261: step 2000, loss = 1.50 (769.3 examples/sec; 0.166 sec/batch)
+2016-11-22 18:37:43.819220: step 3000, loss = 1.48 (766.6 examples/sec; 0.167 sec/batch)
+2016-11-22 18:40:30.868867: step 4000, loss = 1.15 (759.0 examples/sec; 0.169 sec/batch)
+2016-11-22 18:43:17.959348: step 5000, loss = 0.79 (801.6 examples/sec; 0.160 sec/batch)
+2016-11-22 18:46:03.535481: step 6000, loss = 0.98 (775.0 examples/sec; 0.165 sec/batch)
+2016-11-22 18:48:50.086918: step 7000, loss = 0.94 (786.9 examples/sec; 0.163 sec/batch)
+2016-11-22 18:51:35.410308: step 8000, loss = 1.26 (800.2 examples/sec; 0.160 sec/batch)
+2016-11-22 18:54:20.427048: step 9000, loss = 0.95 (780.1 examples/sec; 0.164 sec/batch)
+2016-11-22 18:57:06.321096: step 10000, loss = 0.96 (755.7 examples/sec; 0.169 sec/batch)
+2016-11-22 18:59:52.777928: step 11000, loss = 0.83 (793.5 examples/sec; 0.161 sec/batch)
+2016-11-22 19:02:38.845511: step 12000, loss = 0.86 (785.2 examples/sec; 0.163 sec/batch)
+2016-11-22 19:05:24.809961: step 13000, loss = 0.95 (791.0 examples/sec; 0.162 sec/batch)
+
+
+ubuntu@ip-172-31-60-241:~$ python ~/tensorflow/tensorflow/models/image/cifar10/cifar10_eval.py
+2016-11-22 19:53:21.111682: precision @ 1 = 0.827
+
+```
+
+
 
 
 ```
+https://www.tensorflow.org/versions/r0.11/tutorials/deep_cnn/index.html
+
+It consists of 1,068,298 learnable parameters and requires about 19.5M multiply-add operations to compute inference on a single image.
+
+
+https://github.com/tensorflow/tensorflow/blob/master/tensorflow/models/image/cifar10/cifar10_multi_gpu_train.py
+
+Accuracy:
+cifar10_multi_gpu_train.py achieves ~86% accuracy after 100K steps (256
+epochs of data) as judged by cifar10_eval.py.
+Speed: With batch_size 128.
+System        | Step Time (sec/batch)  |     Accuracy
+--------------------------------------------------------------------
+1 Tesla K20m  | 0.35-0.60              | ~86% at 60K steps  (5 hours)
+1 Tesla K40m  | 0.25-0.35              | ~86% at 100K steps (4 hours)
+2 Tesla K20m  | 0.13-0.20              | ~84% at 30K steps  (2.5 hours)
+3 Tesla K20m  | 0.13-0.18              | ~84% at 30K steps
+4 Tesla K20m  | ~0.10                  | ~84% at 30K steps
+```
+
+
+New Group Security policy 
+```
+TCP protocols:
+enable port 8787
+enable port 8888 for ipython
+enable port 6006 for tensorboard
+enable port 22 for ssh
+enable port 80 for http
+enable port 443 for https
+```
+
 
 
 
