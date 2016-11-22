@@ -189,6 +189,7 @@ cd /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/patches
 tar -czhf patches.tar.gz benign malignant
 # 547MB
 
+aws s3 cp patches/patches.tar.gz s3://cs6501/data/
 ```
 
 
