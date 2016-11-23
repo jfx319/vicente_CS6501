@@ -185,11 +185,53 @@ ls -1 | wc -l
 # 35317 patches (101x101 pixel) total, pretty evenly split
 
 
-cd /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/patches
-tar -czhf patches.tar.gz benign malignant
-# 547MB
+######################### split patches into train 80% / validate 20%, by patient case
 
-aws s3 cp patches/patches.tar.gz s3://cs6501/data/
+ls -1 benign/*.png | cut -d/ -f2 | awk -F'.' '{print $1}' | sort | uniq > cases_benign.txt
+ls -1 malignant/*.png | cut -d/ -f2 | awk -F'.' '{print $1}' | sort | uniq > cases_malignant.txt
+comm -1 -2 cases_benign.txt cases_malignant.txt > cases_shared.txt
+comm -2 -3 cases_benign.txt cases_malignant.txt > uniq_benign.txt
+comm -1 -3 cases_benign.txt cases_malignant.txt > uniq_malignant.txt
+
+cat cases_shared.txt | shuf | awk -v m=`cat cases_shared.txt | wc -l` '{ if (NR <= 0.8*m) {print >"cases_train.txt"} else {print} }' > cases_test.txt
+cat uniq_benign.txt | shuf | awk -v m=`cat uniq_benign.txt | wc -l` '{ if (NR <= 0.8*m) {print >>"cases_train.txt"} else {print} }' >> cases_test.txt
+cat uniq_malignant.txt | shuf | awk -v m=`cat uniq_malignant.txt | wc -l` '{ if (NR <= 0.8*m) {print >>"cases_train.txt"} else {print} }' >> cases_test.txt
+
+
+wc -l cases_train.txt cases_test.txt
+# 1330 cases_train.txt
+#  334 cases_test.txt
+# 1664 total
+
+wc -l cases_shared.txt uniq_benign.txt uniq_malignant.txt
+#   46 cases_shared.txt
+#  778 uniq_benign.txt
+#  840 uniq_malignant.txt
+# 1664 total
+
+
+for case in `cat cases_test.txt`; do 
+    mv benign/${case}*.png validate/benign
+    mv malignant/${case}*.png validate/malignant
+done
+
+for case in `cat cases_train.txt`; do 
+    mv benign/${case}*.png train/benign
+    mv malignant/${case}*.png train/malignant
+done
+
+# 14018 train/benign/*.png
+# 14339 train/malignant/*.png
+#  3480 validate/benign/*.png
+#  3480 validate/malignant/*.png
+
+################## tar for cloud
+
+cd /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/patches
+tar -czhf patches.tar.gz train validate
+# 575MB
+
+aws s3 cp patches.tar.gz s3://cs6501/data/
 ```
 
 
