@@ -139,7 +139,7 @@ def parse_overlayfile(overlaypath, height, width, age=None, density=None):
                   'MALIGNANT': [],
                   'UNPROVEN': []}
     lesiontype = ""     # MASS, CALCIFICATION, OTHER, ??
-    mshape = ""          # only if lesion is MASS
+    mshape = ""         # only if lesion is MASS
     margins = ""        # only if lesion is MASS, sometimes 'N/A'
     calctype = ""       # only if lesion is CALCIFICATION
     distr = ""          # only if lesion is CALC, sometimes 'N/A'
@@ -171,17 +171,17 @@ def parse_overlayfile(overlaypath, height, width, age=None, density=None):
             if fields[0] == 'LESION_TYPE':
                 for i in range(1, len(fields)):
                     if fields[i-1] == 'LESION_TYPE':
-                        lesiontype = fields[i]
+                        lesiontype = fields[i].replace('-','_')
                     elif fields[i-1] == 'SHAPE':
-                        mshape = fields[i]
+                        mshape = fields[i].replace('-','_')
                     elif fields[i-1] == 'TYPE':
-                        calctype = fields[i]
+                        calctype = fields[i].replace('-','_')
                     elif fields[i-1] == 'MARGINS':
                         if fields[i] != 'N/A':
-                            margins = fields[i]
+                            margins = fields[i].replace('-','_')
                     elif fields[i-1] == 'DISTRIBUTION':
                         if fields[i] != 'N/A':
-                            distr = fields[i]
+                            distr = fields[i].replace('-','_')
             if fields[0] == 'ASSESSMENT':     # ACR BI-RADS assessment code 
                 assessment = int( fields[1] )
             
@@ -189,7 +189,7 @@ def parse_overlayfile(overlaypath, height, width, age=None, density=None):
                 subtlety = int( fields[1] )
 
             if fields[0] == 'PATHOLOGY':
-                pathology = fields[1]
+                pathology = fields[1].replace('-','_')
                 
             if fields[0] == 'BOUNDARY':
                 flagDrawBoundary = True
