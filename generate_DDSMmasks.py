@@ -9,7 +9,7 @@ import numpy as np
 #import matplotlib.pyplot as plt
 #import cv2
 from PIL import Image 
-from scipy.ndimage import binary_fill_holes, binary_erosion, imread
+from scipy.ndimage import binary_fill_holes, imread
 #from skimage import io, img_as_bool
 #from skimage.transform import resize
 #import glob
