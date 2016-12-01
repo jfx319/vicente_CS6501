@@ -138,6 +138,9 @@ def parse_overlayfile(overlaypath, height, width, age=None, density=None):
                   'BENIGN_WITHOUT_CALLBACK': [],
                   'MALIGNANT': [],
                   'UNPROVEN': []}
+    lesiontype = ""
+    shape = ""
+    margins = ""
     assessment = None
     subtlety = None
     pathology = ""
@@ -153,7 +156,7 @@ def parse_overlayfile(overlaypath, height, width, age=None, density=None):
                 
                 boundary, mask = parse_boundary(height, width, fields)
                 
-                lesion = {'ASSESSMENT': assessment, 'SUBTLETY': subtlety, 'BOUNDARY': boundary, 'MASK': mask}
+                lesion = {'LESION_TYPE': lesiontype, 'SHAPE': shape, 'MARGINS': margins, 'ASSESSMENT': assessment, 'SUBTLETY': subtlety, 'BOUNDARY': boundary, 'MASK': mask}
                 if age != None: 
                     lesion['PATIENT_AGE'] = age
                 if density != None:
@@ -163,6 +166,12 @@ def parse_overlayfile(overlaypath, height, width, age=None, density=None):
                 #reset flag
                 flagDrawBoundary = False
             
+            if fields[0] == 'LESION_TYPE':
+                lesiontype = fields[1]
+                if fields[2] == 'SHAPE':
+                    shape = fields[3]
+                if fields[4] == 'MARGINS':
+                    margins = fields[5]
             if fields[0] == 'ASSESSMENT':     # ACR BI-RADS assessment code 
                 assessment = int( fields[1] )
             
