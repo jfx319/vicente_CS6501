@@ -242,11 +242,23 @@ aws s3 cp patches.tar.gz s3://cs6501/data/
 ```bash
 parallel --joblog crops.log -a npyfiles.txt python3 generate_DDSMcrops.py {}
 
+cat crops.log | awk '{sum = sum + $4} END {print sum/NR}'
+#10.1617
+cat crops.log | awk '{if ($7 != 0) print $0}'
+#Seq     Host    Starttime       JobRuntime      Send    Receive Exitval Signal  Command
 
 
 
 
-######################### split patches into train 80% / validate 20%, by patient case
+######################### split crops into train 80% / validate 20%, by patient case
+
+cp /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/done/*/*/crop/benign/*.png ~/proj/cs6501crop/data/tmp/benign
+cp /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/done/*/*/crop/malignant/*.png ~/proj/cs6501crop/data/tmp/malignant
+
+#I already did that for patches, but apparently some cases didn't have patches because the mass was too small... e.g. benign_01-B_3098_1
+
+# have to regenerate a split
+cd ~/proj/cs6501crop/data/tmp
 
 ls -1 benign/*.png | cut -d/ -f2 | awk -F'.' '{print $1}' | sort | uniq > cases_benign.txt
 ls -1 malignant/*.png | cut -d/ -f2 | awk -F'.' '{print $1}' | sort | uniq > cases_malignant.txt
@@ -260,39 +272,56 @@ cat uniq_malignant.txt | shuf | awk -v m=`cat uniq_malignant.txt | wc -l` '{ if 
 
 
 wc -l cases_train.txt cases_test.txt
-# 1330 cases_train.txt
-#  334 cases_test.txt
-# 1664 total
+# 1413 cases_train.txt
+#  355 cases_test.txt
+# 1768 total
 
 wc -l cases_shared.txt uniq_benign.txt uniq_malignant.txt
 #   46 cases_shared.txt
-#  778 uniq_benign.txt
-#  840 uniq_malignant.txt
-# 1664 total
+#  849 uniq_benign.txt
+#  873 uniq_malignant.txt
+# 1768 total
 
-
-for case in `cat cases_test.txt`; do 
-    mv benign/${case}*.png validate/benign
-    mv malignant/${case}*.png validate/malignant
+cd ..
+for case in `cat tmp/cases_test.txt`; do 
+    mv tmp/benign/${case}*.png validate/benign
+    mv tmp/malignant/${case}*.png validate/malignant
+done
+for case in `cat tmp/cases_train.txt`; do 
+    mv tmp/benign/${case}*.png train/benign
+    mv tmp/malignant/${case}*.png train/malignant
 done
 
-for case in `cat cases_train.txt`; do 
-    mv benign/${case}*.png train/benign
-    mv malignant/${case}*.png train/malignant
-done
-
-# 14018 train/benign/*.png
-# 14339 train/malignant/*.png
-#  3480 validate/benign/*.png
-#  3480 validate/malignant/*.png
+# 1591 train/benign/*.png
+# 1531 train/malignant/*.png
+#  372 validate/benign/*.png
+#  402 validate/malignant/*.png
 
 ################## tar for cloud
 
-cd /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/patches
-tar -czhf patches.tar.gz train validate
-# 575MB
+~/proj/cs6501crop/data$ tree -d
+#.
+#├── output
+#│   ├── augmented
+#│   ├── checkpoints
+#│   ├── models
+#│   └── tensorboard
+#├── train
+#│   ├── benign
+#│   └── malignant
+#└── validate
+#    ├── benign
+#    └── malignant
+#11 directories
 
-aws s3 cp patches.tar.gz s3://cs6501/data/
+
+cd /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/patches
+
+cd ~/proj/cs6501crop/
+tar -czhf crops.tar.gz data
+# 2.4 GB
+
+aws s3 cp crops.tar.gz s3://cs6501/data/
 ```
 
 
