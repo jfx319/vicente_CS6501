@@ -136,7 +136,7 @@ cd /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases
 
 ls -1 ./done/*/*/*.OVERLAY > OVERLAY_files.txt
 
-parallel --eta -a OVERLAY_files.txt python3 generate_DDSMmasks.py {}
+parallel --joblog masks.log -a OVERLAY_files.txt python3 generate_DDSMmasks.py {}
 # ~ 22min on 8 cores for just masks
 
 for dir in `cat OVERLAY_files.txt`; do
@@ -240,7 +240,7 @@ aws s3 cp patches.tar.gz s3://cs6501/data/
 ### Crops 
 
 ```bash
-parallel --joblog crops.log -a npyfiles.txt python3 generate_DDSMcrops.py {}
+parallel --joblog crops.log -a npyfiles.txt python3 generate_DDSMcrops2.py {}
 
 cat crops.log | awk '{sum = sum + $4} END {print sum/NR}'
 #10.1617
