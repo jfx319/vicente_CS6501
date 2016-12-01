@@ -139,7 +139,7 @@ def parse_overlayfile(overlaypath, height, width, age=None, density=None):
                   'MALIGNANT': [],
                   'UNPROVEN': []}
     lesiontype = ""     # MASS, CALCIFICATION, OTHER, ??
-    shape = ""          # only if lesion is MASS
+    mshape = ""          # only if lesion is MASS
     margins = ""        # only if lesion is MASS, sometimes 'N/A'
     calctype = ""       # only if lesion is CALCIFICATION
     distr = ""          # only if lesion is CALC, sometimes 'N/A'
@@ -158,7 +158,7 @@ def parse_overlayfile(overlaypath, height, width, age=None, density=None):
                 
                 boundary, mask = parse_boundary(height, width, fields)
                 
-                lesion = {'LESION_TYPE': lesiontype, 'SHAPE': shape, 'TYPE': calctype, 'MARGINS': margins,  'DISTRIBUTION': distr, 'ASSESSMENT': assessment, 'SUBTLETY': subtlety, 'BOUNDARY': boundary, 'MASK': mask}
+                lesion = {'LESION_TYPE': lesiontype, 'SHAPE': mshape, 'TYPE': calctype, 'MARGINS': margins,  'DISTRIBUTION': distr, 'ASSESSMENT': assessment, 'SUBTLETY': subtlety, 'BOUNDARY': boundary, 'MASK': mask}
                 if age != None: 
                     lesion['PATIENT_AGE'] = age
                 if density != None:
@@ -181,7 +181,7 @@ def parse_overlayfile(overlaypath, height, width, age=None, density=None):
                             margins = fields[i]
                     elif fields[i-1] == 'DISTRIBUTION':
                         if fields[i] != 'N/A':
-                            margins = fields[i]
+                            distr = fields[i]
             if fields[0] == 'ASSESSMENT':     # ACR BI-RADS assessment code 
                 assessment = int( fields[1] )
             
