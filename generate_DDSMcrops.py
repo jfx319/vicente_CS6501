@@ -35,6 +35,8 @@ def genCrops(png, mask):
         #cv2 tends to write in place; so mask will now be only a border
     cnt = contours[0]
     (x,y), radius = cv2.minEnclosingCircle(cnt)
+    x = int(x)
+    y = int(y)
     radius = int(radius)
     
     #generate a margin (since some bounding circles will be outside image)
