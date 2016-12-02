@@ -471,4 +471,8 @@ https://github.com/fchollet/keras/issues/4486
 
 
 
+### mount bucket as fs
+
+https://fullstacknotes.com/mount-aws-s3-bucket-to-ubuntu-file-system/
+
 
