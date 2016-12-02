@@ -19,12 +19,12 @@ os.makedirs(basedir+'/output/models', exist_ok=True)
 os.makedirs(basedir+'/output/tensorboard', exist_ok=True)
 os.makedirs(basedir+'/output/checkpoints', exist_ok=True)
 os.makedirs(basedir+'/output/augmented', exist_ok=True)
-nb_train_samples = 1881
-nb_validation_samples = 481
-batch_size = 128
-nb_epoch = 300
+nb_train_samples = 7
+nb_validation_samples = 7
+batch_size = 32
+nb_epoch = 1
 nb_worker = 8  #cpus for real-time image augmentation
-img_width, img_height = 150, 150  # target size of input (resizes pictures to this)
+img_width, img_height = 224, 224  # target size of input (resizes pictures to this)
 modelname = 'chollet_actual'
 
 print('Building model...')
@@ -69,26 +69,31 @@ tensorboardlogger = TensorBoard(log_dir=basedir+'/output/tensorboard/', histogra
 csvlogger = CSVLogger(basedir+'/output/'+begintime+'-'+modelname+'.csv', separator=',', append=False)
 
 
-    
+
 # this is the augmentation configuration we will use for training
 train_datagen = ImageDataGenerator(
-        rescale=1.0/(65535),
+        rescale=1.0/65535,
         rotation_range=360,
         horizontal_flip=True,
-        vertical_flip=True)
+        vertical_flip=True, 
+        fill_mode='constant',
+        cval=0)
 
 # this is the augmentation configuration we will use for testing: only rescaling by 16bit value range or original picture
-test_datagen = ImageDataGenerator(rescale=1.0/(65535))
+test_datagen = ImageDataGenerator(
+        rescale=1.0/65535
+        )
 
 train_generator = train_datagen.flow_from_directory(
         train_data_dir,
         target_size=(img_width, img_height),
         batch_size=batch_size,
         class_mode='binary', 
-        color_mode='grayscale')#,
-        #save_prefix='augmented',
-        #save_to_dir=basedir+'/augmented',
-        #save_format='png')
+        color_mode='grayscale'    #,
+                                  #save_prefix='augmented',
+                                  #save_to_dir=basedir+'/output/augmented',
+                                  #save_format='png'
+        )
 
 validation_generator = test_datagen.flow_from_directory(
         validation_data_dir,
