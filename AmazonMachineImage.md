@@ -459,7 +459,7 @@ nvidia-docker run -it -p 8888:8888 -p 6006:6006 -v /home/jcx9dy/proj/cs6501:/mnt
 
 ```
 
-### installed keras and tensorflow natively
+# installed keras and tensorflow natively
 
 edit keras: 
 ```bash
@@ -468,6 +468,39 @@ sudo sed -i -e "s/img = img.convert('L')/img = img.convert('I') #changed from 'L
 replaces mode='L' default 8bit with mode='I' for 16bit support
 
 https://github.com/fchollet/keras/issues/4486
+
+
+Download weights from existing keras models (https://keras.io/applications/)
+```bash
+
+#Source:  https://keras.io/applications/
+
+#Weights are downloaded automatically when instantiating a model. They are stored at ~/.keras/models/
+
+#Helper functions worth checking out in the github repo:
+from keras.preprocessing import image
+from keras.applications.resnet50 import preprocess_input, decode_predictions
+from keras.applications.vgg16 import preprocess_input
+
+
+from keras.applications.resnet50 import ResNet50
+model = ResNet50(weights='imagenet')
+
+from keras.applications.vgg16 import VGG16
+model = VGG16(weights='imagenet')
+
+from keras.applications.vgg19 import VGG19
+model = VGG19(weights='imagenet')
+
+from keras.applications.inception_v3 import InceptionV3
+model = InceptionV3(weights='imagenet')
+
+from keras.applications.xception import Xception
+model = Xception(weights='imagenet')
+
+from keras.applications.music_tagger_crnn import MusicTaggerCRNN
+model = MusicTaggerCRNN(weights='msd')
+```
 
 
 
