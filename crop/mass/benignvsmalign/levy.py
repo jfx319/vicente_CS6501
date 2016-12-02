@@ -25,7 +25,7 @@ os.makedirs(basedir+'/output/checkpoints', exist_ok=True)
 os.makedirs(basedir+'/output/augmented', exist_ok=True)
 nb_train_samples = 1881
 nb_validation_samples = 481
-batch_size = 64
+batch_size = 32
 nb_epoch = 1000
 nb_worker = 8  #cpus for real-time image augmentation
 modelname = 'levy'
@@ -64,15 +64,16 @@ model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(2, 2), strides=(2,2)))
 
 model.add(Flatten())  # this converts our 3D feature maps to 1D feature vectors
+model.add(Dropout(0.5))
 model.add(Dense(256, activation='relu', init='he_normal'))
 model.add(Dropout(0.5))
 model.add(Dense(64, activation='relu', init='he_normal'))
 model.add(Dropout(0.5))
 model.add(Dense(1, activation='sigmoid'))
 
-sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+#sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='binary_crossentropy',
-              optimizer=sgd,
+              optimizer='Nadam',
               metrics=['accuracy'])
 
 begintime = datetime.now().strftime("%Y%m%d_%H%M%S")
