@@ -12,10 +12,6 @@ from keras.optimizers import SGD
 from keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard, ReduceLROnPlateau, CSVLogger
 from keras.layers import BatchNormalization
 
-# target size of input (resizes pictures to this)
-  #keras doesn't have a random crop preprocessing function yet
-img_width, img_height = 224, 224
-
 basedir = './'
 train_data_dir = basedir+'/train'
 validation_data_dir = basedir+'/validate'
@@ -25,54 +21,41 @@ os.makedirs(basedir+'/output/checkpoints', exist_ok=True)
 os.makedirs(basedir+'/output/augmented', exist_ok=True)
 nb_train_samples = 1881
 nb_validation_samples = 481
-batch_size = 32
+batch_size = 128
 nb_epoch = 1000
 nb_worker = 8  #cpus for real-time image augmentation
-modelname = 'levy'
-
+img_width, img_height = 96, 96  # target size of input (resizes pictures to this)
+modelname = 'chollet_blog'
 
 print('Building model...')
 model = Sequential()
 model.add(ZeroPadding2D((1,1), input_shape=(img_height, img_width, 1)))
-model.add(Convolution2D(32, 3, 3, border_mode='same', init='he_normal'))
+model.add(Convolution2D(32, 3, 3))
 #model.add(BatchNormalization())
 model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2), strides=(2,2)))
+model.add(MaxPooling2D(pool_size=(2, 2)))
 
 model.add(ZeroPadding2D((1,1)))
-model.add(Convolution2D(64, 3, 3, border_mode='same', init='he_normal'))
+model.add(Convolution2D(64, 3, 3))
 #model.add(BatchNormalization())
 model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2), strides=(2,2)))
+model.add(MaxPooling2D(pool_size=(2, 2)))
 
 model.add(ZeroPadding2D((1,1)))
-model.add(Convolution2D(128, 3, 3, border_mode='same', init='he_normal'))
+model.add(Convolution2D(128, 3, 3))
 #model.add(BatchNormalization())
 model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2), strides=(2,2)))
-
-model.add(ZeroPadding2D((1,1)))
-model.add(Convolution2D(256, 3, 3, border_mode='same', init='he_normal'))
-#model.add(BatchNormalization())
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2), strides=(2,2)))
-
-model.add(ZeroPadding2D((1,1)))
-model.add(Convolution2D(512, 3, 3, border_mode='same', init='he_normal'))
-#model.add(BatchNormalization())
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2), strides=(2,2)))
+model.add(MaxPooling2D(pool_size=(2, 2)))
 
 model.add(Flatten())  # this converts our 3D feature maps to 1D feature vectors
-model.add(Dense(256, activation='relu', init='he_normal'))
+model.add(Dense(64))
+model.add(Activation('relu'))
 model.add(Dropout(0.5))
-model.add(Dense(64, activation='relu', init='he_normal'))
-model.add(Dropout(0.5))
-model.add(Dense(1, activation='sigmoid'))
+model.add(Dense(1))
+model.add(Activation('sigmoid'))
 
-sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='binary_crossentropy',
-              optimizer=sgd,
+              optimizer='rmsprop',
               metrics=['accuracy'])
 
 begintime = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -89,7 +72,7 @@ tensorboardlogger = TensorBoard(log_dir=basedir+'/output/tensorboard/', histogra
 csvlogger = CSVLogger(basedir+'/output/'+begintime+'-'+modelname+'.csv', separator=',', append=False)
 
 
-    
+
 # this is the augmentation configuration we will use for training
 train_datagen = ImageDataGenerator(
         rescale=1.0/65535,
@@ -137,4 +120,5 @@ model.fit_generator(
 #model.save_weights('first_try.h5')  # always save your weights after training or during training
 
 #model.load_weights(basedir+'/output/checkpoints/20161125_071924-checkpoint_weights_-102-0.572.hdf5')
+
 
