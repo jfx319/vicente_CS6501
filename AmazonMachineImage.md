@@ -500,6 +500,16 @@ model = Xception(weights='imagenet')
 
 from keras.applications.music_tagger_crnn import MusicTaggerCRNN
 model = MusicTaggerCRNN(weights='msd')
+
+
+# 528   MB  vgg16_weights_tf_dim_ordering_tf_kernels.h5
+# 549   MB  vgg19_weights_tf_dim_ordering_tf_kernels.h5
+#  91   MB  inception_v3_weights_tf_dim_ordering_tf_kernels.h5
+#  88   MB  xception_weights_tf_dim_ordering_tf_kernels.h5
+#  99   MB  resnet50_weights_tf_dim_ordering_tf_kernels.h5
+#   1.6 MB  music_tagger_crnn_weights_tf_kernels_tf_dim_ordering.h5
+
+
 ```
 
 
