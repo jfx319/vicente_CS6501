@@ -19,28 +19,31 @@ os.makedirs(basedir+'/output/models', exist_ok=True)
 os.makedirs(basedir+'/output/tensorboard', exist_ok=True)
 os.makedirs(basedir+'/output/checkpoints', exist_ok=True)
 os.makedirs(basedir+'/output/augmented', exist_ok=True)
-nb_train_samples = 7
-nb_validation_samples = 7
-batch_size = 32
-nb_epoch = 1
+nb_train_samples = 1881
+nb_validation_samples = 481
+batch_size = 128
+nb_epoch = 1000
 nb_worker = 8  #cpus for real-time image augmentation
-img_width, img_height = 224, 224  # target size of input (resizes pictures to this)
-modelname = 'chollet_actual'
+img_width, img_height = 96, 96  # target size of input (resizes pictures to this)
+modelname = 'chollet_blog'
 
 print('Building model...')
 model = Sequential()
-model.add(Convolution2D(32, 3, 3, input_shape=(img_height, img_width, 1)))
-model.add(BatchNormalization())
+model.add(ZeroPadding2D((1,1), input_shape=(img_height, img_width, 1)))
+model.add(Convolution2D(32, 3, 3))
+#model.add(BatchNormalization())
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 
+model.add(ZeroPadding2D((1,1)))
 model.add(Convolution2D(64, 3, 3))
-model.add(BatchNormalization())
+#model.add(BatchNormalization())
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 
+model.add(ZeroPadding2D((1,1)))
 model.add(Convolution2D(128, 3, 3))
-model.add(BatchNormalization())
+#model.add(BatchNormalization())
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 
@@ -52,7 +55,7 @@ model.add(Dense(1))
 model.add(Activation('sigmoid'))
 
 model.compile(loss='binary_crossentropy',
-              optimizer='adam',
+              optimizer='rmsprop',
               metrics=['accuracy'])
 
 begintime = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -117,6 +120,5 @@ model.fit_generator(
 #model.save_weights('first_try.h5')  # always save your weights after training or during training
 
 #model.load_weights(basedir+'/output/checkpoints/20161125_071924-checkpoint_weights_-102-0.572.hdf5')
-
 
 
