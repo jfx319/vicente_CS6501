@@ -459,5 +459,16 @@ nvidia-docker run -it -p 8888:8888 -p 6006:6006 -v /home/jcx9dy/proj/cs6501:/mnt
 
 ```
 
+### installed keras and tensorflow natively
+
+edit keras: 
+```bash
+sudo sed -i -e "s/img = img.convert('L')/img = img.convert('I') #changed from 'L' to support 16bit grayscale/" /usr/local/lib/python3.5/dist-packages/keras/preprocessing/image.py
+```
+replaces mode='L' default 8bit with mode='I' for 16bit support
+
+https://github.com/fchollet/keras/issues/4486
+
+
 
 
