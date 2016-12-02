@@ -248,20 +248,15 @@ cat crops.log | awk '{if ($7 != 0) print $0}'
 #Seq     Host    Starttime       JobRuntime      Send    Receive Exitval Signal  Command
 
 
+##############################################################
+###        Masses only:  Benign vs Malignant               ###
+##############################################################
+cd ~/proj/cs6501/mass/benignvsmalign
+cp /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/done/*/*/crop/benign/*MASS*.png ./tmp/benign &
+cp /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/done/*/*/crop/malignant/*MASS*.png ./tmp/malignant &
 
-
-######################### split crops into train 80% / validate 20%, by patient case
-
-cp /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/done/*/*/crop/benign/*.png ~/proj/cs6501crop/data/tmp/benign
-cp /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/done/*/*/crop/malignant/*.png ~/proj/cs6501crop/data/tmp/malignant
-
-#I already did that for patches, but apparently some cases didn't have patches because the mass was too small... e.g. benign_01-B_3098_1
-
-# have to regenerate a split
-cd ~/proj/cs6501crop/data/tmp
-
-ls -1 benign/*.png | cut -d/ -f2 | awk -F'.' '{print $1}' | sort | uniq > cases_benign.txt
-ls -1 malignant/*.png | cut -d/ -f2 | awk -F'.' '{print $1}' | sort | uniq > cases_malignant.txt
+ls -1 tmp/benign/*.png | awk -F'/' '{print $(NF)}' | awk -F'.' '{print $1}' | sort | uniq > cases_benign.txt
+ls -1 tmp/malignant/*.png | awk -F'/' '{print $(NF)}' | awk -F'.' '{print $1}' | sort | uniq > cases_malignant.txt
 comm -1 -2 cases_benign.txt cases_malignant.txt > cases_shared.txt
 comm -2 -3 cases_benign.txt cases_malignant.txt > uniq_benign.txt
 comm -1 -3 cases_benign.txt cases_malignant.txt > uniq_malignant.txt
@@ -272,34 +267,38 @@ cat uniq_malignant.txt | shuf | awk -v m=`cat uniq_malignant.txt | wc -l` '{ if 
 
 
 wc -l cases_train.txt cases_test.txt
-# 1413 cases_train.txt
-#  355 cases_test.txt
-# 1768 total
+#  892 cases_train.txt
+#  225 cases_test.txt
+# 1117 total
+
 
 wc -l cases_shared.txt uniq_benign.txt uniq_malignant.txt
-#   46 cases_shared.txt
-#  849 uniq_benign.txt
-#  873 uniq_malignant.txt
-# 1768 total
+#   21 cases_shared.txt
+#  515 uniq_benign.txt
+#  581 uniq_malignant.txt
+# 1117 total
 
-cd ..
-for case in `cat tmp/cases_test.txt`; do 
+
+
+for case in `cat cases_test.txt`; do 
     mv tmp/benign/${case}*.png validate/benign
     mv tmp/malignant/${case}*.png validate/malignant
 done
-for case in `cat tmp/cases_train.txt`; do 
+for case in `cat cases_train.txt`; do 
     mv tmp/benign/${case}*.png train/benign
     mv tmp/malignant/${case}*.png train/malignant
 done
 
-# 1591 train/benign/*.png
-# 1531 train/malignant/*.png
-#  372 validate/benign/*.png
-#  402 validate/malignant/*.png
+
+echo -e "`ls -1 train/benign/*.png | wc -l` train/benign/*.png\n`ls -1 train/malignant/*.png | wc -l` train/malignant/*.png\n`ls -1 validate/benign/*.png | wc -l` validate/benign/*.png\n`ls -1 validate/malignant/*.png | wc -l` validate/malignant/*.png"
+# 903 train/benign/*.png
+# 978 train/malignant/*.png
+# 238 validate/benign/*.png
+# 243 validate/malignant/*.png
 
 ################## tar for cloud
 
-~/proj/cs6501crop/data$ tree -d
+~/proj/cs6501/mass/benignvsmalign$ tree -d
 #.
 #├── output
 #│   ├── augmented
@@ -314,14 +313,10 @@ done
 #    └── malignant
 #11 directories
 
+tar -czhf masses_benign_vs_malign.tgz train validate &
+#3.2 GB
+aws s3 cp masses_benign_vs_malign.tgz s3://cs6501/data/
 
-cd /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/patches
-
-cd ~/proj/cs6501crop/
-tar -czhf crops.tar.gz data
-# 2.4 GB
-
-aws s3 cp crops.tar.gz s3://cs6501/data/
 ```
 
 
