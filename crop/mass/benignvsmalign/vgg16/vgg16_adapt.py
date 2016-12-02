@@ -1,53 +1,25 @@
-'''This script goes along the blog post
-"Building powerful image classification models using very little data"
-from blog.keras.io.
-It uses data that can be downloaded at:
-https://www.kaggle.com/c/dogs-vs-cats/data
-In our setup, we:
-- created a data/ folder
-- created train/ and validation/ subfolders inside data/
-- created cats/ and dogs/ subfolders inside train/ and validation/
-- put the cat pictures index 0-999 in data/train/cats
-- put the cat pictures index 1000-1400 in data/validation/cats
-- put the dogs pictures index 12500-13499 in data/train/dogs
-- put the dog pictures index 13500-13900 in data/validation/dogs
-So that we have 1000 training examples for each class, and 400 validation examples for each class.
-In summary, this is our directory structure:
-```
-data/
-    train/
-        dogs/
-            dog001.jpg
-            dog002.jpg
-            ...
-        cats/
-            cat001.jpg
-            cat002.jpg
-            ...
-    validation/
-        dogs/
-            dog001.jpg
-            dog002.jpg
-            ...
-        cats/
-            cat001.jpg
-            cat002.jpg
-            ...
-```
-'''
-import os
+
+import sys, os
 import h5py
 import numpy as np
+from datetime import datetime
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
-from keras.layers import Convolution2D, MaxPooling2D, ZeroPadding2D
+from keras.layers import Convolution2D, MaxPooling2D, ZeroPadding2D, SpatialDropout2D
 from keras.layers import Activation, Dropout, Flatten, Dense
+from keras.optimizers import SGD
+from keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard, ReduceLROnPlateau, CSVLogger
+from keras.layers import BatchNormalization
+
+from keras import backend as K
+K.set_image_dim_ordering('th') # legacy weight file (below) is theano tensor ordering
+
 
 # path to the model weights file.
 weights_path = '../keras/examples/vgg16_weights.h5'
 top_model_weights_path = 'bottleneck_fc_model.h5'
 # dimensions of our images.
-img_width, img_height = 150, 150
+img_width, img_height = 224, 224
 
 train_data_dir = 'data/train'
 validation_data_dir = 'data/validation'
@@ -121,7 +93,7 @@ def save_bottlebeck_features():
             class_mode=None,
             shuffle=False)
     bottleneck_features_train = model.predict_generator(generator, nb_train_samples)
-    np.save(open('bottleneck_features_train.npy', 'w'), bottleneck_features_train)
+    np.save(open('bottleneck_features_train.npy', 'wb'), bottleneck_features_train)
 
     generator = datagen.flow_from_directory(
             validation_data_dir,
@@ -130,15 +102,15 @@ def save_bottlebeck_features():
             class_mode=None,
             shuffle=False)
     bottleneck_features_validation = model.predict_generator(generator, nb_validation_samples)
-    np.save(open('bottleneck_features_validation.npy', 'w'), bottleneck_features_validation)
+    np.save(open('bottleneck_features_validation.npy', 'wb'), bottleneck_features_validation)
 
 
 def train_top_model():
     train_data = np.load(open('bottleneck_features_train.npy'))
-    train_labels = np.array([0] * (nb_train_samples / 2) + [1] * (nb_train_samples / 2))
+    train_labels = np.array([0] * np.floor((nb_train_samples / 2)) + [1] * np.floor((nb_train_samples / 2)))
 
     validation_data = np.load(open('bottleneck_features_validation.npy'))
-    validation_labels = np.array([0] * (nb_validation_samples / 2) + [1] * (nb_validation_samples / 2))
+    validation_labels = np.array([0] * np.floor((nb_validation_samples / 2)) + [1] * np.floor((nb_validation_samples / 2)))
 
     model = Sequential()
     model.add(Flatten(input_shape=train_data.shape[1:]))
