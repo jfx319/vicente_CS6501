@@ -11,106 +11,83 @@ from keras.optimizers import SGD
 from keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard, ReduceLROnPlateau, CSVLogger
 from keras.layers import BatchNormalization
 
-from keras import backend as K
-K.set_image_dim_ordering('th') # legacy weight file (below) is theano tensor ordering
 
+from keras.applications.vgg16 import VGG16
+from keras.preprocessing import image
+from keras.applications.vgg16 import preprocess_input
+
+model = VGG16(weights='imagenet', include_top=False)
+
+img_path = 'elephant.jpg'
+img = image.load_img(img_path, target_size=(224, 224))
+x = image.img_to_array(img)
+x = np.expand_dims(x, axis=0)
+x = preprocess_input(x)
+
+features = model.predict(x)
+
+
+########################################
 
 # path to the model weights file.
 weights_path = '../keras/examples/vgg16_weights.h5'
 top_model_weights_path = 'bottleneck_fc_model.h5'
-# dimensions of our images.
-img_width, img_height = 224, 224
 
-train_data_dir = 'data/train'
-validation_data_dir = 'data/validation'
-nb_train_samples = 2000
-nb_validation_samples = 800
+  benign,  malignant
+basedir = './'
+train_data_dir = basedir+'/train'
+validation_data_dir = basedir+'/validate'
+os.makedirs(basedir+'/output/models', exist_ok=True)
+os.makedirs(basedir+'/output/tensorboard', exist_ok=True)
+os.makedirs(basedir+'/output/checkpoints', exist_ok=True)
+os.makedirs(basedir+'/output/augmented', exist_ok=True)
+nb_train_samples = 1881
+nb_train_class0 = 903         #benign
+nb_train_class1 = 978         #malignant
+nb_validation_samples = 481
+nb_validation_class0 = 238    #benign
+nb_validation_class1 = 243    #malignant
+
+nb_worker = 8  #cpus for real-time image augmentation
+batch_size = 32
 nb_epoch = 50
+img_width, img_height = 224, 224  # target size of input (resizes pictures to this)
+modelname = 'VGG16notop'
 
 
 def save_bottlebeck_features():
-    datagen = ImageDataGenerator(rescale=1./255)
 
-    # build the VGG16 network
-    model = Sequential()
-    model.add(ZeroPadding2D((1, 1), input_shape=(3, img_width, img_height)))
-
-    model.add(Convolution2D(64, 3, 3, activation='relu', name='conv1_1'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(64, 3, 3, activation='relu', name='conv1_2'))
-    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
-
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(128, 3, 3, activation='relu', name='conv2_1'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(128, 3, 3, activation='relu', name='conv2_2'))
-    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
-
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(256, 3, 3, activation='relu', name='conv3_1'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(256, 3, 3, activation='relu', name='conv3_2'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(256, 3, 3, activation='relu', name='conv3_3'))
-    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
-
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(512, 3, 3, activation='relu', name='conv4_1'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(512, 3, 3, activation='relu', name='conv4_2'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(512, 3, 3, activation='relu', name='conv4_3'))
-    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
-
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(512, 3, 3, activation='relu', name='conv5_1'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(512, 3, 3, activation='relu', name='conv5_2'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(512, 3, 3, activation='relu', name='conv5_3'))
-    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
-
-    # load the weights of the VGG16 networks
-    # (trained on ImageNet, won the ILSVRC competition in 2014)
-    # note: when there is a complete match between your model definition
-    # and your weight savefile, you can simply call model.load_weights(filename)
-    assert os.path.exists(weights_path), 'Model weights not found (see "weights_path" variable in script).'
-    f = h5py.File(weights_path)
-    for k in range(f.attrs['nb_layers']):
-        if k >= len(model.layers):
-            # we don't look at the last (fully-connected) layers in the savefile
-            break
-        g = f['layer_{}'.format(k)]
-        weights = [g['param_{}'.format(p)] for p in range(g.attrs['nb_params'])]
-        model.layers[k].set_weights(weights)
-    f.close()
+    # load the VGG16 network with ImageNet weights
+    model = VGG16(weights='imagenet', include_top=False)
     print('Model loaded.')
-
+    
+    datagen = ImageDataGenerator(rescale=1./65535)
     generator = datagen.flow_from_directory(
             train_data_dir,
             target_size=(img_width, img_height),
-            batch_size=32,
-            class_mode=None,
-            shuffle=False)
+            batch_size=33,   #1881 divisible by 33
+            class_mode=None, # predict method doesn't accept labels
+            shuffle=False)   # our data will be in order 903 benign, 978 malignant
     bottleneck_features_train = model.predict_generator(generator, nb_train_samples)
-    np.save(open('bottleneck_features_train.npy', 'wb'), bottleneck_features_train)
-
+    np.save(open(basedir+'/output/checkpoints/'+modelname+'bottleneck_features_train.npy', 'wb'), bottleneck_features_train)
+    print('train bottleneck features saved, shape:', bottleneck_features_train.shape)
+    
     generator = datagen.flow_from_directory(
             validation_data_dir,
             target_size=(img_width, img_height),
-            batch_size=32,
-            class_mode=None,
-            shuffle=False)
+            batch_size=32,    #481 divisible by 37
+            class_mode=None,  # predict method doesn't accept labels
+            shuffle=False)    # our data will be in order 238 benign, 243 malignant
     bottleneck_features_validation = model.predict_generator(generator, nb_validation_samples)
-    np.save(open('bottleneck_features_validation.npy', 'wb'), bottleneck_features_validation)
-
+    np.save(open(basedir+'/output/checkpoints/'+modelname+'bottleneck_features_validation.npy', 'wb'), bottleneck_features_validation)
+    print('validation bottleneck features saved, shape:', bottleneck_features_train.shape)
 
 def train_top_model():
-    train_data = np.load(open('bottleneck_features_train.npy'))
-    train_labels = np.array([0] * np.floor((nb_train_samples / 2)) + [1] * np.floor((nb_train_samples / 2)))
+    train_data = np.load(open(basedir+'/output/checkpoints/'+modelname+'bottleneck_features_train.npy'))
+    train_labels = np.array( [0]*nb_train_class0 + [1]*nb_train_class1 )
 
-    validation_data = np.load(open('bottleneck_features_validation.npy'))
-    validation_labels = np.array([0] * np.floor((nb_validation_samples / 2)) + [1] * np.floor((nb_validation_samples / 2)))
+    validation_data = np.load(open(basedir+'/output/checkpoints/'+modelname+'bottleneck_features_validation.npy'))
+    validation_labels = np.array( [0]*nb_validation_class0  + [1]*nb_validation_class1 )
 
     model = Sequential()
     model.add(Flatten(input_shape=train_data.shape[1:]))
@@ -121,10 +98,12 @@ def train_top_model():
     model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['accuracy'])
 
     model.fit(train_data, train_labels,
-              nb_epoch=nb_epoch, batch_size=32,
-              validation_data=(validation_data, validation_labels))
-    model.save_weights(top_model_weights_path)
-
-
+              nb_epoch=nb_epoch, batch_size=batch_size,
+              validation_data=(validation_data, validation_labels),
+              callbacks=[])
+    
+    model.save_weights(basedir+'/output/checkpoints/'+modelname+'_top_weights.hdf5')
+    
+### MAIN
 save_bottlebeck_features()
 train_top_model()
