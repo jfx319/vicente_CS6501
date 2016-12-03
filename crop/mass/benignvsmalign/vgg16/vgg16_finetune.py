@@ -1,79 +1,42 @@
-
-import os
+import sys, os
 import h5py
 import numpy as np
+from datetime import datetime
 from keras.preprocessing.image import ImageDataGenerator
-from keras import optimizers
 from keras.models import Sequential
-from keras.layers import Convolution2D, MaxPooling2D, ZeroPadding2D
+from keras import optimizers
+#from keras.layers import Convolution2D, MaxPooling2D, ZeroPadding2D, SpatialDropout2D
 from keras.layers import Activation, Dropout, Flatten, Dense
+from keras.callbacks import ModelCheckpoint, TensorBoard, CSVLogger
+#from keras.layers import BatchNormalization
 
-# path to the model weights files.
-weights_path = '../keras/examples/vgg16_weights.h5'
-top_model_weights_path = 'fc_model.h5'
-# dimensions of our images.
-img_width, img_height = 150, 150
+from keras.applications.vgg16 import VGG16
 
-train_data_dir = 'data/train'
-validation_data_dir = 'data/validation'
-nb_train_samples = 2000
-nb_validation_samples = 800
-nb_epoch = 50
+########################################
 
+basedir = './'
+train_data_dir = basedir+'/train'
+validation_data_dir = basedir+'/validate'
+os.makedirs(basedir+'/output/models', exist_ok=True)
+os.makedirs(basedir+'/output/tensorboard', exist_ok=True)
+os.makedirs(basedir+'/output/checkpoints', exist_ok=True)
+os.makedirs(basedir+'/output/augmented', exist_ok=True)
+nb_train_samples = 1881
+nb_train_class0 = 903         #benign
+nb_train_class1 = 978         #malignant
+nb_validation_samples = 481
+nb_validation_class0 = 238    #benign
+nb_validation_class1 = 243    #malignant
+
+nb_worker = 8  #cpus for real-time image augmentation
+batch_size = 32
+nb_epoch = 1000
+img_width, img_height = 224, 224  # target size of input (resizes pictures to this)
+modelname = 'VGG16notop'
+
+#################################################################
 # build the VGG16 network
-model = Sequential()
-model.add(ZeroPadding2D((1, 1), input_shape=(3, img_width, img_height)))
-
-model.add(Convolution2D(64, 3, 3, activation='relu', name='conv1_1'))
-model.add(ZeroPadding2D((1, 1)))
-model.add(Convolution2D(64, 3, 3, activation='relu', name='conv1_2'))
-model.add(MaxPooling2D((2, 2), strides=(2, 2)))
-
-model.add(ZeroPadding2D((1, 1)))
-model.add(Convolution2D(128, 3, 3, activation='relu', name='conv2_1'))
-model.add(ZeroPadding2D((1, 1)))
-model.add(Convolution2D(128, 3, 3, activation='relu', name='conv2_2'))
-model.add(MaxPooling2D((2, 2), strides=(2, 2)))
-
-model.add(ZeroPadding2D((1, 1)))
-model.add(Convolution2D(256, 3, 3, activation='relu', name='conv3_1'))
-model.add(ZeroPadding2D((1, 1)))
-model.add(Convolution2D(256, 3, 3, activation='relu', name='conv3_2'))
-model.add(ZeroPadding2D((1, 1)))
-model.add(Convolution2D(256, 3, 3, activation='relu', name='conv3_3'))
-model.add(MaxPooling2D((2, 2), strides=(2, 2)))
-
-model.add(ZeroPadding2D((1, 1)))
-model.add(Convolution2D(512, 3, 3, activation='relu', name='conv4_1'))
-model.add(ZeroPadding2D((1, 1)))
-model.add(Convolution2D(512, 3, 3, activation='relu', name='conv4_2'))
-model.add(ZeroPadding2D((1, 1)))
-model.add(Convolution2D(512, 3, 3, activation='relu', name='conv4_3'))
-model.add(MaxPooling2D((2, 2), strides=(2, 2)))
-
-model.add(ZeroPadding2D((1, 1)))
-model.add(Convolution2D(512, 3, 3, activation='relu', name='conv5_1'))
-model.add(ZeroPadding2D((1, 1)))
-model.add(Convolution2D(512, 3, 3, activation='relu', name='conv5_2'))
-model.add(ZeroPadding2D((1, 1)))
-model.add(Convolution2D(512, 3, 3, activation='relu', name='conv5_3'))
-model.add(MaxPooling2D((2, 2), strides=(2, 2)))
-
-# load the weights of the VGG16 networks
-# (trained on ImageNet, won the ILSVRC competition in 2014)
-# note: when there is a complete match between your model definition
-# and your weight savefile, you can simply call model.load_weights(filename)
-assert os.path.exists(weights_path), 'Model weights not found (see "weights_path" variable in script).'
-f = h5py.File(weights_path)
-for k in range(f.attrs['nb_layers']):
-    if k >= len(model.layers):
-        # we don't look at the last (fully-connected) layers in the savefile
-        break
-    g = f['layer_{}'.format(k)]
-    weights = [g['param_{}'.format(p)] for p in range(g.attrs['nb_params'])]
-    model.layers[k].set_weights(weights)
-f.close()
-print('Model loaded.')
+model = VGG16(weights='imagenet', include_top=False)
 
 # build a classifier model to put on top of the convolutional model
 top_model = Sequential()
@@ -85,7 +48,7 @@ top_model.add(Dense(1, activation='sigmoid'))
 # note that it is necessary to start with a fully-trained
 # classifier, including the top classifier,
 # in order to successfully do fine-tuning
-top_model.load_weights(top_model_weights_path)
+top_model.load_weights(basedir+'/output/checkpoints/'+modelname+'_top_weights.hdf5')
 
 # add the model on top of the convolutional base
 model.add(top_model)
@@ -95,37 +58,64 @@ model.add(top_model)
 for layer in model.layers[:25]:
     layer.trainable = False
 
-# compile the model with a SGD/momentum optimizer
-# and a very slow learning rate.
+# compile the model with a SGD/momentum optimizer and a very slow learning rate.
 model.compile(loss='binary_crossentropy',
               optimizer=optimizers.SGD(lr=1e-4, momentum=0.9),
               metrics=['accuracy'])
 
+begintime = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+#Save model architechture
+json_string = model.to_json()
+open(basedir+'/output/models/'+begintime+'-'+modelname+'.json', 'w').write(json_string)
+
+#Call backs
+checkpointer = ModelCheckpoint(filepath=basedir+'/output/checkpoints/'+begintime+'-'+modelname+'_finetune-{epoch:03d}-{val_acc:.3f}.hdf5', monitor='val_acc', save_weights_only=True, verbose=1, save_best_only=True)
+tensorboardlogger = TensorBoard(log_dir=basedir+'/output/tensorboard/', histogram_freq=0, write_graph=True, write_images=False)
+#earlystop = EarlyStopping(monitor='val_acc', min_delta=0.001, patience=10, verbose=1, mode='auto')
+#reducelr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=10, verbose=1, mode='auto', epsilon=0.0001, cooldown=0, min_lr=0.001)
+csvlogger = CSVLogger(basedir+'/output/'+begintime+'-'+modelname+'_finetune.csv', separator=',', append=False)
+
 # prepare data augmentation configuration
 train_datagen = ImageDataGenerator(
-        rescale=1./255,
-        shear_range=0.2,
-        zoom_range=0.2,
-        horizontal_flip=True)
+        rescale=1.0/65535,
+        rotation_range=360,
+        horizontal_flip=True,
+        vertical_flip=True, 
+        fill_mode='constant',
+        cval=0)
 
-test_datagen = ImageDataGenerator(rescale=1./255)
+# this is the augmentation configuration we will use for testing: only rescaling by 16bit value range or original picture
+test_datagen = ImageDataGenerator(
+        rescale=1.0/65535
+        )
 
 train_generator = train_datagen.flow_from_directory(
         train_data_dir,
-        target_size=(img_height, img_width),
-        batch_size=32,
-        class_mode='binary')
+        target_size=(img_width, img_height),
+        batch_size=batch_size,
+        class_mode='binary', 
+        color_mode='rgb'    #,
+                                  #save_prefix='augmented',
+                                  #save_to_dir=basedir+'/output/augmented',
+                                  #save_format='png'
+        )
 
 validation_generator = test_datagen.flow_from_directory(
         validation_data_dir,
-        target_size=(img_height, img_width),
-        batch_size=32,
-        class_mode='binary')
+        target_size=(img_width, img_height),
+        batch_size=batch_size,
+        class_mode='binary',
+        color_mode='rgb')
 
-# fine-tune the model
+### Train model
+print('Training model... ')
 model.fit_generator(
         train_generator,
         samples_per_epoch=nb_train_samples,
         nb_epoch=nb_epoch,
         validation_data=validation_generator,
-        nb_val_samples=nb_validation_samples)
+        nb_val_samples=nb_validation_samples, 
+        callbacks=[checkpointer, tensorboardlogger, csvlogger],
+        nb_worker=nb_worker, 
+        pickle_safe=True)
