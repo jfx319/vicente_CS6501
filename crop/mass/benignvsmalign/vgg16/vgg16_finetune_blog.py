@@ -5,8 +5,9 @@ from datetime import datetime
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras import optimizers
+from keras.models import Model
 #from keras.layers import Convolution2D, MaxPooling2D, ZeroPadding2D, SpatialDropout2D
-from keras.layers import Activation, Dropout, Flatten, Dense
+from keras.layers import Activation, Dropout, Flatten, Dense, GlobalAveragePooling2D
 from keras.callbacks import ModelCheckpoint, TensorBoard, CSVLogger
 #from keras.layers import BatchNormalization
 
@@ -36,26 +37,24 @@ modelname = 'VGG16notop'
 
 #################################################################
 # build the VGG16 network
-model = VGG16(weights='imagenet', include_top=False)
+base_model = VGG16(include_top=False, weights='imagenet', input_shape=(img_width, img_height, 3))
 
 # build a classifier model to put on top of the convolutional model
 top_model = Sequential()
-top_model.add(Flatten(input_shape=model.output_shape[1:]))
+top_model.add(Flatten(input_shape=base_model.output_shape[1:]))
 top_model.add(Dense(256, activation='relu'))
 top_model.add(Dropout(0.5))
 top_model.add(Dense(1, activation='sigmoid'))
 
 # note that it is necessary to start with a fully-trained
-# classifier, including the top classifier,
-# in order to successfully do fine-tuning
+# classifier, including the top classifier, in order to successfully do fine-tuning
 top_model.load_weights(basedir+'/output/checkpoints/'+modelname+'_top_weights.hdf5')
 
 # add the model on top of the convolutional base
-model.add(top_model)
+model = Model(input=base_model.input, output=top_model.output)
 
-# set the first 25 layers (up to the last conv block)
-# to non-trainable (weights will not be updated)
-for layer in model.layers[:25]:
+# freeze first 25 layers (up to the last conv block)
+for layer in model.layers[:25]:  #model.layers has length 19 initially
     layer.trainable = False
 
 # compile the model with a SGD/momentum optimizer and a very slow learning rate.
