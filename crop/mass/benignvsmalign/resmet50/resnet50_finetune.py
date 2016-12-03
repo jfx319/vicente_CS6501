@@ -55,7 +55,7 @@ for i, layer in enumerate(model.layers):
     print(i, layer.name)
 
 #add regularizers:
-for layer in model.layers():
+for layer in model.layers:
     if hasattr(layer, 'W_regularizer'):
         layer.W_regularizer = l2(l=0.001)
 
