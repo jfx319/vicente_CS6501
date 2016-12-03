@@ -29,7 +29,7 @@ nb_worker = 4  #cpus for real-time image augmentation
 batch_size = 32
 nb_epoch = 1000
 img_width, img_height = 224, 224  # target size of input (resizes pictures to this)
-modelname = 'VGG16finetune'
+modelname = 'VGG16'
 
 #################################################################
 # build the VGG16 network
