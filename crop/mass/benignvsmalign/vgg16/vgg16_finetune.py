@@ -39,7 +39,7 @@ base_model = VGG16(include_top=False, weights='imagenet', input_shape=(img_width
 x = base_model.output
 x = GlobalAveragePooling2D()(x)
 # let's add a fully-connected layer
-x = Dense(1024, activation='relu')(x)
+x = Dense(128, activation='relu')(x)
 # and a logistic layer -- n classes
 predictions = Dense(1, activation='softmax')(x)
 
@@ -90,7 +90,7 @@ validation_generator = test_datagen.flow_from_directory(
 # train the model on the new data for a few epochs
 print('Training top layers... ')
 model.fit_generator(
-        train_generator, samples_per_epoch=nb_train_samples, nb_epoch=50,
+        train_generator, samples_per_epoch=nb_train_samples, nb_epoch=5,
         validation_data=validation_generator, nb_val_samples=nb_validation_samples, 
         callbacks=[csvlogger],
         nb_worker=nb_worker, pickle_safe=True)
@@ -100,13 +100,13 @@ model.fit_generator(
 
 ### Open up last convolution block for training
 for layer in model.layers[:15]:
-   layer.trainable = False
+    layer.trainable = False
 for layer in model.layers[15:]:
-   layer.trainable = True
+    layer.trainable = True
 
 # compile the model with a SGD/momentum optimizer and a very slow learning rate.
 model.compile(loss='binary_crossentropy',
-              optimizer=SGD(lr=1e-4, momentum=0.9),
+              optimizer=optimizers.SGD(lr=1e-4, momentum=0.9),
               metrics=['accuracy'])
 
 
@@ -150,7 +150,7 @@ model.fit_generator(
 
 ### Open up last convolution block for training
 for layer in model.layers:
-   layer.trainable = True
+    layer.trainable = True
 
 #for i, layer in enumerate(base_model.layers):
 #   print(i, layer.name)
