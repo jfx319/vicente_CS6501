@@ -27,7 +27,9 @@ Digital Database for Screening Mammography (DDSM)
 5 convolutional layers, 3 fully-connected layers
 
 * DeepMammo: Breast Mass Classification using Deep Convolutional Neural Networks  
-http://cs231n.stanford.edu/reports2016/306_Report.pdf
+http://cs231n.stanford.edu/reports2016/306_Report.pdf  
+https://github.com/arzavj/deepMammo  
+
 
 Data not available, but ideas/methods may be applied to other datasets:
 
