@@ -27,7 +27,7 @@ nb_validation_samples = 481
 
 nb_worker = 4  #cpus for real-time image augmentation
 batch_size = 32
-nb_epoch = 1000
+nb_epoch = 500
 img_width, img_height = 224, 224  # target size of input (resizes pictures to this)
 modelname = 'VGG16'
 
@@ -37,26 +37,32 @@ base_model = VGG16(include_top=False, weights='imagenet', input_shape=(img_width
 
 # add a global spatial average pooling layer
 x = base_model.output
-x = GlobalAveragePooling2D()(x)
 # let's add a fully-connected layer
-x = Dense(128, activation='relu')(x)
+x = Dense(1000, activation='relu')(x)
+x = Dropout(0.2)(x)
+x = Dense(1000, activation='relu')(x)
+x = Dropout(0.2)(x)
 # and a logistic layer -- n classes
-predictions = Dense(1, activation='softmax')(x)
+predictions = Dense(2, activation='softmax')(x)
 
 # add the model on top of the convolutional base
 model = Model(input=base_model.input, output=predictions)
 
+#add regularizers:
+for layer in model.layers():
+    if hasattr(layer, 'W_regularizer'):
+        layer.W_regularizer = l2(l=0.001)
+
 #Save model architechture
 json_string = model.to_json()
 open(basedir+'/output/models/'+modelname+'_adapted.json', 'w').write(json_string)
-
 
 # first: train only the top layers (which were randomly initialized)
 for layer in base_model.layers:
     layer.trainable = False
 
 # compile the model (should be done *after* setting layers to non-trainable)
-model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['accuracy'])
+model.compile(optimizer=SGD(lr=.01, decay=0.0005, momentum=0.9), loss='categorical_crossentropy', metrics=['accuracy'])
 
 
 ############
@@ -78,12 +84,12 @@ test_datagen = ImageDataGenerator(
 
 train_generator = train_datagen.flow_from_directory(
         train_data_dir, target_size=(img_width, img_height), batch_size=batch_size,
-        class_mode='binary', 
+        class_mode='categorical', 
         color_mode='rgb')
 
 validation_generator = test_datagen.flow_from_directory(
         validation_data_dir, target_size=(img_width, img_height), batch_size=batch_size,
-        class_mode='binary',
+        class_mode='categorical',
         color_mode='rgb')
 
 
@@ -105,8 +111,8 @@ for layer in model.layers[15:]:
     layer.trainable = True
 
 # compile the model with a SGD/momentum optimizer and a very slow learning rate.
-model.compile(loss='binary_crossentropy',
-              optimizer=optimizers.SGD(lr=1e-4, momentum=0.9),
+model.compile(loss='categorical_crossentropy',
+              optimizer=SGD(lr=.01, decay=0.0005, momentum=0.9),
               metrics=['accuracy'])
 
 
@@ -146,12 +152,12 @@ model.fit_generator(
         callbacks=[checkpointer, tensorboardlogger, csvlogger],
         nb_worker=nb_worker, pickle_safe=True)
 
-
-
-### Open up last convolution block for training
+### Open up all layersfor training
 for layer in model.layers:
     layer.trainable = True
 
 #for i, layer in enumerate(base_model.layers):
 #   print(i, layer.name)
+
+
 
