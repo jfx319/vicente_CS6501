@@ -498,6 +498,11 @@ Also duplicate 16bit grayscale across 3 channels when using mode 'rgb'
 ```bash
 jupyter notebook password is set to instance id
 ec2metadata --instance-id
+
+if don't want this already running one: 
+kill $(pgrep jupyter)
+
+switch to screen, location of choice, and rerun jupyter notebook
 ```
 
 
