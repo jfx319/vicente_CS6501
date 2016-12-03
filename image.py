@@ -1,14 +1,4 @@
-'''
-!!! HACKED !!! version of keras/preprocessing/image.py 
-  to handle 16bit (single-channel) grayscale
-  always uses Pillow mode 'I', and duplicates to 3 channels if selecting 'rgb'
-  assumes user will scale by:  1.0/(2**16 - 1)
-
-place in:  
-/usr/local/lib/python3.5/dist-packages/keras/preprocessing/image.py
-
-
-Fairly basic set of tools for real-time data augmentation on image data.
+'''Fairly basic set of tools for real-time data augmentation on image data.
 Can easily be extended to include new transformations,
 new preprocessing methods, etc...
 '''
@@ -190,7 +180,7 @@ def load_img(path, grayscale=False, target_size=None):
     if not grayscale:
         x = np.asarray(img, dtype='float32')
         img = np.dstack( (x,)*3 )
-    return img
+    return img    
 
 
 def list_pictures(directory, ext='jpg|jpeg|bmp|png'):
