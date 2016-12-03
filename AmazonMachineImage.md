@@ -461,16 +461,37 @@ nvidia-docker run -it -p 8888:8888 -p 6006:6006 -v /home/jcx9dy/proj/cs6501:/mnt
 
 # installed keras and tensorflow natively
 
-edit keras: 
-```bash
-sudo sed -i -e "s/img = img.convert('L')/img = img.convert('I') #changed from 'L' to support 16bit grayscale/" /usr/local/lib/python3.5/dist-packages/keras/preprocessing/image.py
+hack keras to only handle grayscale 16bit: 
+
+`/usr/local/lib/python3.5/dist-packages/keras/preprocessing/image.py`
+```python
+    if grayscale:
+        img = img.convert('L')
+    else:  # Ensure 3 channel even when loaded image is grayscale
+        img = img.convert('RGB')
+    if target_size:
+        img = img.resize((target_size[1], target_size[0]))
+    return img
 ```
-replaces mode='L' default 8bit with mode='I' for 16bit support
+```python
+    if grayscale:
+        img = img.convert('I') #changed from 'L' to support 16bit grayscale
+    else:
+        img = img.convert('I') #still need 'I' b/c 'RGB' assumes 8bit
+    if target_size:
+        img = img.resize((target_size[1], target_size[0]))
+    if not grayscale:
+        x = np.asarray(img, dtype='float32')
+        img = np.dstack( (x,)*3 )
+    return img
+```
+replaces mode='L' default 8bit with mode='I' for 16bit support (https://github.com/fchollet/keras/issues/4486)
 
-https://github.com/fchollet/keras/issues/4486
+Also duplicate 16bit grayscale across 3 channels when using mode 'rgb'
 
 
-Download weights from existing keras models (https://keras.io/applications/)
+
+#### Download weights from existing keras models (https://keras.io/applications/)
 ```bash
 
 #Source:  https://keras.io/applications/
