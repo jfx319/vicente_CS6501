@@ -6,10 +6,11 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras.optimizers import SGD
 from keras.models import Model
-#from keras.layers import Convolution2D, MaxPooling2D, ZeroPadding2D, SpatialDropout2D
+from keras.regularizers import l2
+from keras.layers import Convolution2D, MaxPooling2D, ZeroPadding2D, SpatialDropout2D
 from keras.layers import Activation, Dropout, Flatten, Dense, GlobalAveragePooling2D
 from keras.callbacks import ModelCheckpoint, TensorBoard, CSVLogger
-#from keras.layers import BatchNormalization
+from keras.layers import BatchNormalization
 
 from keras.applications.resnet50 import ResNet50
 
