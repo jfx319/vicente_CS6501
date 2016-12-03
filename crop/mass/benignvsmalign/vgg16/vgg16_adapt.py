@@ -50,7 +50,7 @@ def save_bottlebeck_features():
         class_mode=None, # predict method doesn't accept labels
         shuffle=False)   # our data will be in order 903 benign, 978 malignant
     bottleneck_features_train = model.predict_generator(generator, nb_train_samples)
-    np.save(open(basedir+'/output/checkpoints/'+modelname+'bottleneck_features_train.npy', 'wb'), bottleneck_features_train)
+    np.save(basedir+'/output/checkpoints/'+modelname+'_bottleneck_features_train.npy', bottleneck_features_train)
     print('train bottleneck features saved, shape:', bottleneck_features_train.shape)
     
     generator = datagen.flow_from_directory(
@@ -60,14 +60,14 @@ def save_bottlebeck_features():
         class_mode=None,  # predict method doesn't accept labels
         shuffle=False)    # our data will be in order 238 benign, 243 malignant
     bottleneck_features_validation = model.predict_generator(generator, nb_validation_samples)
-    np.save(open(basedir+'/output/checkpoints/'+modelname+'bottleneck_features_validation.npy', 'wb'), bottleneck_features_validation)
+    np.save(basedir+'/output/checkpoints/'+modelname+'_bottleneck_features_validation.npy', bottleneck_features_validation)
     print('validation bottleneck features saved, shape:', bottleneck_features_train.shape)
 
 def train_top_model():
-    train_data = np.load(open(basedir+'/output/checkpoints/'+modelname+'bottleneck_features_train.npy'))
+    train_data = np.load(open(basedir+'/output/checkpoints/'+modelname+'_bottleneck_features_train.npy'))
     train_labels = np.array( [0]*nb_train_class0 + [1]*nb_train_class1 )
 
-    validation_data = np.load(open(basedir+'/output/checkpoints/'+modelname+'bottleneck_features_validation.npy'))
+    validation_data = np.load(open(basedir+'/output/checkpoints/'+modelname+'_bottleneck_features_validation.npy'))
     validation_labels = np.array( [0]*nb_validation_class0  + [1]*nb_validation_class1 )
 
     model = Sequential()
