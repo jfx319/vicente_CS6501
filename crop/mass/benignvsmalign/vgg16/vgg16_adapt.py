@@ -31,7 +31,7 @@ nb_validation_class1 = 243    #malignant
 
 nb_worker = 8  #cpus for real-time image augmentation
 batch_size = 32
-nb_epoch = 50
+nb_epoch = 100
 img_width, img_height = 224, 224  # target size of input (resizes pictures to this)
 modelname = 'VGG16notop'
 
@@ -79,7 +79,7 @@ def train_top_model():
     model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['accuracy'])
 
     #Call backs
-    csvlogger = CSVLogger(basedir+'/output/'+modelname+'_top_weights.csv', separator=',', append=False)
+    csvlogger = CSVLogger(basedir+'/output/'+modelname+'_top_weights.csv', separator=',', append=True)
 
     model.fit(train_data, train_labels,
         nb_epoch=nb_epoch, 
