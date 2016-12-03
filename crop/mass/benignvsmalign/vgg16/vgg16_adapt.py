@@ -46,7 +46,7 @@ def save_bottlebeck_features():
     generator = datagen.flow_from_directory(
         train_data_dir,
         target_size=(img_width, img_height),
-        batch_size=33,   #1881 divisible by 33
+        batch_size=batch_size,
         class_mode=None, # predict method doesn't accept labels
         shuffle=False)   # our data will be in order 903 benign, 978 malignant
     bottleneck_features_train = model.predict_generator(generator, nb_train_samples)
@@ -56,7 +56,7 @@ def save_bottlebeck_features():
     generator = datagen.flow_from_directory(
         validation_data_dir,
         target_size=(img_width, img_height),
-        batch_size=32,    #481 divisible by 37
+        batch_size=batch_size,
         class_mode=None,  # predict method doesn't accept labels
         shuffle=False)    # our data will be in order 238 benign, 243 malignant
     bottleneck_features_validation = model.predict_generator(generator, nb_validation_samples)
@@ -64,10 +64,10 @@ def save_bottlebeck_features():
     print('validation bottleneck features saved, shape:', bottleneck_features_train.shape)
 
 def train_top_model():
-    train_data = np.load(open(basedir+'/output/checkpoints/'+modelname+'_bottleneck_features_train.npy'))
+    train_data = np.load(basedir+'/output/checkpoints/'+modelname+'_bottleneck_features_train.npy')
     train_labels = np.array( [0]*nb_train_class0 + [1]*nb_train_class1 )
 
-    validation_data = np.load(open(basedir+'/output/checkpoints/'+modelname+'_bottleneck_features_validation.npy'))
+    validation_data = np.load(basedir+'/output/checkpoints/'+modelname+'_bottleneck_features_validation.npy')
     validation_labels = np.array( [0]*nb_validation_class0  + [1]*nb_validation_class1 )
 
     model = Sequential()
@@ -82,11 +82,10 @@ def train_top_model():
     csvlogger = CSVLogger(basedir+'/output/'+modelname+'_top_weights.csv', separator=',', append=False)
 
     model.fit(train_data, train_labels,
-              nb_epoch=nb_epoch, batch_size=batch_size,
-              validation_data=(validation_data, validation_labels),
-              callbacks=[csvlogger],
-              nb_worker=nb_worker, 
-              pickle_safe=True)
+        nb_epoch=nb_epoch, 
+        batch_size=batch_size,
+        validation_data=(validation_data, validation_labels),
+        callbacks=[csvlogger])
     
     model.save_weights(basedir+'/output/checkpoints/'+modelname+'_top_weights.hdf5')
     
