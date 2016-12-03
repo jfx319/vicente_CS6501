@@ -4,7 +4,7 @@ import numpy as np
 from datetime import datetime
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
-from keras import optimizers
+from keras.optimizers import SGD
 from keras.models import Model
 #from keras.layers import Convolution2D, MaxPooling2D, ZeroPadding2D, SpatialDropout2D
 from keras.layers import Activation, Dropout, Flatten, Dense, GlobalAveragePooling2D
