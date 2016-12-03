@@ -52,6 +52,8 @@ top_model.load_weights(basedir+'/output/checkpoints/'+modelname+'_top_weights.hd
 
 # add the model on top of the convolutional base
 model = Model(input=base_model.input, output=top_model.output)
+############################ not working yet
+
 
 # freeze first 25 layers (up to the last conv block)
 for layer in model.layers[:25]:  #model.layers has length 19 initially
