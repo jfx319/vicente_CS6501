@@ -319,6 +319,76 @@ aws s3 cp masses_benign_vs_malign.tgz s3://cs6501/data/
 
 ```
 
+```bash
+##############################################################
+###                Calcification vs Mass                   ###
+##############################################################
+cd ~/proj/cs6501/all/calcvsmass
+cp /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/done/*/*/crop/*/*CALC*.png ./tmp/calc &
+cp /media/jcx9dy/SG4/figment.csee.usf.edu/pub/DDSM/cases/done/*/*/crop/*/*MASS*.png ./tmp/mass &
+
+ls -1 tmp/calc/*.png | awk -F'/' '{print $(NF)}' | awk -F'.' '{print $1}' | sort | uniq > cases_calc.txt
+ls -1 tmp/mass/*.png | awk -F'/' '{print $(NF)}' | awk -F'.' '{print $1}' | sort | uniq > cases_mass.txt
+comm -1 -2 cases_calc.txt cases_mass.txt > cases_shared.txt
+comm -2 -3 cases_calc.txt cases_mass.txt > uniq_calc.txt
+comm -1 -3 cases_calc.txt cases_mass.txt > uniq_mass.txt
+
+cat cases_shared.txt | shuf | awk -v m=`cat cases_shared.txt | wc -l` '{ if (NR <= 0.8*m) {print >"cases_train.txt"} else {print} }' > cases_test.txt
+cat uniq_calc.txt | shuf | awk -v m=`cat uniq_calc.txt | wc -l` '{ if (NR <= 0.8*m) {print >>"cases_train.txt"} else {print} }' >> cases_test.txt
+cat uniq_mass.txt | shuf | awk -v m=`cat uniq_mass.txt | wc -l` '{ if (NR <= 0.8*m) {print >>"cases_train.txt"} else {print} }' >> cases_test.txt
+
+
+wc -l cases_train.txt cases_test.txt
+# 1411 cases_train.txt   
+#  354 cases_test.txt
+# 1765 total
+
+
+wc -l cases_shared.txt uniq_calc.txt uniq_mass.txt
+#   62 cases_shared.txt
+#  648 uniq_calc.txt
+# 1055 uniq_mass.txt
+# 1765 total
+
+
+for case in `cat cases_test.txt`; do 
+    mv tmp/calc/${case}*.png validate/calc
+    mv tmp/mass/${case}*.png validate/mass
+done
+for case in `cat cases_train.txt`; do 
+    mv tmp/calc/${case}*.png train/calc
+    mv tmp/mass/${case}*.png train/mass
+done
+
+
+echo -e "`ls -1 train/calc/*.png | wc -l` train/calc/*.png\n`ls -1 train/mass/*.png | wc -l` train/mass/*.png\n`ls -1 validate/calc/*.png | wc -l` validate/calc/*.png\n`ls -1 validate/mass/*.png | wc -l` validate/mass/*.png"
+#  1228 train/calc/*.png
+#  1875 train/mass/*.png
+#   293 validate/calc/*.png
+#   487 validate/mass/*.png
+
+
+################## tar for cloud
+
+~/proj/cs6501/all/calcvsmass$ tree -d
+#.
+#├── output
+#│   ├── augmented
+#│   ├── checkpoints
+#│   ├── models
+#│   └── tensorboard
+#├── train
+#│   ├── calc
+#│   └── mass
+#└── validate
+#    ├── calc
+#    └── mass
+#11 directories
+
+tar -czhf all_calc_vs_mass.tgz train validate &
+# GB
+aws s3 cp all_calc_vs_mass.tgz s3://cs6501/data/
+```
 
 
 
