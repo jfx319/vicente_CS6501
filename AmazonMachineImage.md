@@ -495,6 +495,13 @@ replaces mode='L' default 8bit with mode='I' for 16bit support (https://github.c
 Also duplicate 16bit grayscale across 3 channels when using mode 'rgb'
 
 
+```bash
+jupyter notebook password is set to instance id
+ec2metadata --instance-id
+```
+
+
+
 
 #### Download weights from existing keras models (https://keras.io/applications/)
 ```bash
