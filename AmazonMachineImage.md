@@ -461,6 +461,11 @@ nvidia-docker run -it -p 8888:8888 -p 6006:6006 -v /home/jcx9dy/proj/cs6501:/mnt
 
 # installed keras and tensorflow natively
 
+upgrade to latest keras (it changes every week!!):
+```bash
+sudo pip install git+git://github.com/fchollet/keras.git --upgrade
+```
+
 hack keras to only handle grayscale 16bit: 
 
 `/usr/local/lib/python3.5/dist-packages/keras/preprocessing/image.py`
