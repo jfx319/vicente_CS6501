@@ -140,12 +140,12 @@ test_datagen = ImageDataGenerator(
 
 train_generator = train_datagen.flow_from_directory(
         train_data_dir, target_size=(img_width, img_height), batch_size=batch_size,
-        class_mode='binary', 
+        class_mode='categorical', 
         color_mode='rgb')
 
 validation_generator = test_datagen.flow_from_directory(
         validation_data_dir, target_size=(img_width, img_height), batch_size=batch_size,
-        class_mode='binary',
+        class_mode='categorical',
         color_mode='rgb')
 
 ### train block5
@@ -191,12 +191,12 @@ test_datagen = ImageDataGenerator(
 
 train_generator = train_datagen.flow_from_directory(
         train_data_dir, target_size=(img_width, img_height), batch_size=batch_size,
-        class_mode='binary', 
+        class_mode='categorical', 
         color_mode='rgb')
 
 validation_generator = test_datagen.flow_from_directory(
         validation_data_dir, target_size=(img_width, img_height), batch_size=batch_size,
-        class_mode='binary',
+        class_mode='categorical',
         color_mode='rgb')
 
 ### train full model
