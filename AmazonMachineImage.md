@@ -274,12 +274,22 @@ enable port 443 for https
 
 
 Copy data to instance
-```
+```bash
 aws s3 cp s3://cs6501/data/patches.tar.gz ~/data/
 tar -xzf ~/data/patches.tar.gz &
 
 ```
+Optimize AMI
+```bash
+sudo pip3 install git+git://github.com/fchollet/keras.git --upgrade
+sudo nvidia-smi -pm 1
+sudo nvidia-smi --auto-boost-default=0
+sudo nvidia-smi -ac 2505,875
 
+wget -O /usr/local/lib/python3.4/dist-packages/keras/preprocessing/image.py https://raw.githubusercontent.com/jfx319/vicente_CS6501/master/image.py?token=ATvGiJdgJoOzlSo16n_iT46IJCemHydaks5YTQeVwA%3D%3D
+
+sudo kill $(pgrep jupyter)
+```
 
 
 ```bash
