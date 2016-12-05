@@ -29,7 +29,7 @@ Digital Database for Screening Mammography (DDSM)
 * DeepMammo: Breast Mass Classification using Deep Convolutional Neural Networks  
 http://cs231n.stanford.edu/reports2016/306_Report.pdf  
 https://github.com/arzavj/deepMammo  
-
+https://github.com/tensorflow/models/tree/master/slim/nets  
 
 Data not available, but ideas/methods may be applied to other datasets:
 
