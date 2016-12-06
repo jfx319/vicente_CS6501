@@ -17,7 +17,7 @@ The interpretation and diagnosis by radiologists is still a manual and laborous 
 Methods for standardizing and improving diagnosis are still being explored. 
 This paper examines previous approaches using convolutional neural network architecture to reduce feature-engineering and automatically learn a model from labeled data. 
 
-#### Dataset
+### Dataset
 
 The dataset used is one of the largest publicly available radiographic imaging databases: Digital Database for Screening Mammography (DDSM) [5]. 
 The full database contains roughly 2620 cases (patients), curated to contain well-balanced class distribution: (695 normal, 870 benign, 914 cancer, 141 benign with callback). 
@@ -45,20 +45,20 @@ Although not huge when comparing with other machine learning image datasets, it 
 
 
 
-#### Preprocessing
+### Preprocessing
 
-###### Decompressing raw data
+##### Decompressing raw data
 As the raw images are in an obscure, old format (data is from 1990s), a preprocessing utility [6] was used to convert them to PNM intermediate format, whereupon an imagemagick wrapper [7] is used to convert to 16bit PNG. 
 This utility [6] also claims to normalize batch effects due to different scanners/institutions used during data collection. 
 
-###### Cropping region of interest
+##### Cropping region of interest
 The associated boundary "overlay" files were parsed, along with lesion-specific clinical metadata, and converted to filled binary masks. 
 A minimum enclosing circle was then calculated for each mass and the circular region of twice the diameter, was then cropped from the original image to include 50% margin as context for learning. 
 
-###### Figure 2. Example crops from image with 2 masses 
+##### Figure 2. Example crops from image with 2 masses 
 ![](./figures/enclosing_circle.png)
 
-###### Data augmentation
+##### Data augmentation
 Because dataset is small, we augment the training data in real-time during training, by random rotation 0-360 degrees, and random horizontal/vertical flip. 
 The real-time augmentation on CPU was chosen to yield a wider augmentation variety than _a priori_ fixed multiplier. 
 The validation data was not augmented.
@@ -66,26 +66,26 @@ Finally, the input images were also resized to 96x96 pixels for Shallow 3-CNN an
 Additionally, the single channel grayscale was duplicated across 3 channels for InceptionV3 since the pretrained architecture requires 3 color channels.
 
 
-#### Model architecture
+### Model architecture
 As a baseline comparison, we implemented a relatively shallow 3 convolutional layer model similar to "Levy Net" [2]. 
 Based on the GoogLeNet performance from [2], we then decided to try its corresponding updated version InceptionV3 [8]. 
 The ImageNet pretrained weights were loaded, and the dense/fully-connected layers were stripped from the top and replaced with a single 2-neuron layer with softmax activation for 2 class categorical classification. 
 Where applicable, an L2-regularizer (l2=0.001) was added to the weights of both models to combat overfit. 
 The architectures are as follows: 
 
-###### Shallow 3-convolution layers architecture
+##### Shallow 3-convolution layers architecture
 ![](./figures/shallow_architecture.png)  
 
-###### Adapted InceptionV3 architecture
+##### Adapted InceptionV3 architecture
 ![](./figures/adapted_InceptionV3.png)  
 
 
-#### Training
+### Model Training
 Both models were implemented in keras [9] with tensorflow [10] backend and trained on gpu. 
 The Shallow 3-CN was trained from scratch with batch_size=128, using RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0) optimizer, and loss=binary_crossentropy. 
 The InceptionV3 model was fine-tuned with batch_size=32, optimizer=SGD(lr=.01, decay=0.0002, momentum=0.9, nesterov=False) and loss=categorical_crossentropy. Specifically, only the classification layer was finetuned for 200 epochs, after which Inception block 5 was also unfrozen and finetuned for another ~10 epochs. Some of the training logs for InceptionV3 were accidentally overwritten. Due to its heavy computational cost, we did not regenerate these values on a separate run.
 
-###### Figure 3. Training progress
+##### Figure 3. Training progress
 ![](./figures/shallow_training.png) 
 ![](./figures/InceptionV3_training.png)
 
@@ -93,13 +93,17 @@ The InceptionV3 model was fine-tuned with batch_size=32, optimizer=SGD(lr=.01, d
 
 ### Future work
 
-visualization of saliency
+##### Model & Feature visualization
+To better understand why the model is performing accurately on some images but not on others, we can try to visualize features learned through deconvolutional approaches or indirectly, such as  masking parts of an image and measuring response on the prediction confidence. 
 
-###### Data cleaning
+##### Data cleaning
 There are many annotations that, time permitting, may require flagging images for removal or special handling. 
 As an example, one image warns: "The LEFT_CC image has a scanner artifact in it. The rollers slipped while the image was scanning. That is why the letters look distorted." 
 Some images are distorted, perhaps due to small boundary shapes, which were then upsampled.
 
+##### Data expansion
+Deep learning approaches often require thousands or millions of samples to train on. 
+Therefore a larger future dataset or aggregating multiple smaller datasets together would be helpful. 
 
 
 ### References
