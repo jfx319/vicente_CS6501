@@ -71,33 +71,42 @@ As a baseline comparison, we implemented a relatively shallow 3 convolutional la
 Based on the GoogLeNet performance from [2], we then decided to try its corresponding updated version InceptionV3 [8]. 
 The ImageNet pretrained weights were loaded, and the dense/fully-connected layers were stripped from the top and replaced with a single 2-neuron layer with softmax activation for 2 class categorical classification. 
 Where applicable, an L2-regularizer (l2=0.001) was added to the weights of both models to combat overfit. 
-The architectures are as follows: 
+The architectures are shown in Figure 3. 
 
-##### Shallow 3-convolution layers architecture
+##### Figure 3a. Shallow architecture
 ![](./figures/shallow_architecture.png)  
 
-##### Adapted InceptionV3 architecture
+##### Figure 3b. (adapted) InceptionV3 architecture
 ![](./figures/adapted_InceptionV3.png)  
 
 
 ### Model Training
 Both models were implemented in keras [9] with tensorflow [10] backend and trained on gpu. 
 The Shallow 3-CN was trained from scratch with batch_size=128, using RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0) optimizer, and loss=binary_crossentropy. 
-The InceptionV3 model was fine-tuned with batch_size=32, optimizer=SGD(lr=.01, decay=0.0002, momentum=0.9, nesterov=False) and loss=categorical_crossentropy. Specifically, only the classification layer was finetuned for 200 epochs, after which Inception block 5 was also unfrozen and finetuned for another ~10 epochs. Some of the training logs for InceptionV3 were accidentally overwritten. Due to its heavy computational cost, we did not regenerate these values on a separate run.
+The InceptionV3 model was fine-tuned with batch_size=32, optimizer=SGD(lr=.01, decay=0.0002, momentum=0.9, nesterov=False) and loss=categorical_crossentropy. Specifically, only the classification layer was finetuned for 200 epochs, after which Inception block 5 was also unfrozen and finetuned for another ~10 epochs. 
+Some of the training logs for InceptionV3 were accidentally overwritten. Due to its heavy computational cost, we did not regenerate these values on a separate run.
+The training progress is shown in Figure 4.
 
-##### Figure 3. Training progress
-![](./figures/shallow_training.png) 
+##### Figure 4. Training progress
+![](./figures/shallow_training.png)
 ![](./figures/InceptionV3_training.png)
 
 ### Results
-
+Our Shallow net achieved a final validation accuracy of 73%, which surpasses the 60% result achieved by the similar "LevyNet" architecture [2] despite having 1 fewer densely connected layer. 
+Our InceptionV3 adaptation, however, achieved a final validation accuracy of 83% compared to the 93% of GoogLeNet from [2]. 
+For our best model, representative false positives, false negatives, true positives, and true negatives are shown in the supplementary power point. 
+Looking at these representative images, some of the error may be due to artifacts in the images but others seem like legitimate errors due to the difficulty of the problem: some benign lesions do indeed look indistinguishable (to the layperson) from malignant lesions. 
+In general, the deeper model improves upon the shallow model at reducing false positives, which explains the majority of the accuracy gains. 
+The confusion table for both models are shown in Figure 5. 
 
 ##### Figure 5. Confusion table
 ![](./figures/confusion_table.png)
 
-##### Figure 5. Human benchmark
-![](./figures/human_benchmark.png)
+We speculate that the poorer performance of our deep architecture may be due to differences in the training process ([2] also allowed earlier layers to learn by setting a low learning rate multiplier of 0.1) or differences in architecture ([2] kept as many fully connected layers as possible). 
+Even so, our best model is still on par with the bottom quartile of human performance as shown in Figure 6.
 
+##### Figure 6. Human benchmark
+![](./figures/human_benchmark.png)
 
 ### Future work
 
@@ -135,8 +144,4 @@ Therefore a larger future dataset or aggregating multiple smaller datasets toget
 [9] https://github.com/fchollet/keras
 
 [10] https://github.com/tensorflow/tensorflow
-
-[11] 
-
-
 
