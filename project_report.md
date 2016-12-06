@@ -56,7 +56,7 @@ The associated boundary "overlay" files were parsed, along with lesion-specific 
 A minimum enclosing circle was then calculated for each mass and the circular region of twice the diameter, was then cropped from the original image to include 50% margin as context for learning. 
 
 ##### Figure 2. Example crops from image with 2 masses 
-<img src="./figures/enclosing_circle.png" width="800">
+<img src="./figures/enclosing_circle.png" width="600">
 
 ##### Data augmentation
 Because dataset is small, we augment the training data in real-time during training, by random rotation 0-360 degrees, and random horizontal/vertical flip. 
@@ -74,7 +74,7 @@ Where applicable, an L2-regularizer (l2=0.001) was added to the weights of both 
 The architectures are shown in Figure 3. 
 
 ##### Figure 3a. Shallow architecture
-<img src="./figures/shallow_architecture.png" width="800">
+<img src="./figures/shallow_architecture.png" width="550">
 
 ##### Figure 3b. (adapted) InceptionV3 architecture
 <img src="./figures/adapted_InceptionV3.png" width="300">
