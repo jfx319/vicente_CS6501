@@ -89,6 +89,14 @@ The InceptionV3 model was fine-tuned with batch_size=32, optimizer=SGD(lr=.01, d
 ![](./figures/shallow_training.png) 
 ![](./figures/InceptionV3_training.png)
 
+### Results
+
+
+##### Figure 5. Confusion table
+![](./figures/confusion_table.png)
+
+##### Figure 5. Human benchmark
+![](./figures/human_benchmark.png)
 
 
 ### Future work
