@@ -25,7 +25,7 @@ The advantage of this dataset is that for regions of interest in each high-resol
 A representative sample is shown in Figure 1. 
 
 ##### Figure 1. Original images with overlaid region boundary 
-![](./figures/sample_thumbs.png)
+<img src="./figures/sample_thumbs.png" width="500">
 
 For this project, we only consider single contiguous masses (not calcifications, which tend to be star-like clusters of punctate dots) to stratify the problem into a more defined sub-challenge. 
 To generalize better, we split our data by patient (instead of by image) into 80% train and 20% validation. 
@@ -56,7 +56,7 @@ The associated boundary "overlay" files were parsed, along with lesion-specific 
 A minimum enclosing circle was then calculated for each mass and the circular region of twice the diameter, was then cropped from the original image to include 50% margin as context for learning. 
 
 ##### Figure 2. Example crops from image with 2 masses 
-![](./figures/enclosing_circle.png)
+<img src="./figures/enclosing_circle.png" width="500">
 
 ##### Data augmentation
 Because dataset is small, we augment the training data in real-time during training, by random rotation 0-360 degrees, and random horizontal/vertical flip. 
@@ -74,10 +74,10 @@ Where applicable, an L2-regularizer (l2=0.001) was added to the weights of both 
 The architectures are shown in Figure 3. 
 
 ##### Figure 3a. Shallow architecture
-![](./figures/shallow_architecture.png)  
+<img src="./figures/shallow_architecture.png" width="500">
 
 ##### Figure 3b. (adapted) InceptionV3 architecture
-![](./figures/adapted_InceptionV3.png)  
+<img src="./figures/adapted_InceptionV3.png" width="400">
 
 
 ### Model Training
@@ -88,8 +88,9 @@ Some of the training logs for InceptionV3 were accidentally overwritten. Due to 
 The training progress is shown in Figure 4.
 
 ##### Figure 4. Training progress
-![](./figures/shallow_training.png)
-![](./figures/InceptionV3_training.png)
+<img src="./figures/shallow_training.png" width="300">
+<img src="./figures/InceptionV3_training.png" width="300">
+
 
 ### Results
 Our Shallow net achieved a final validation accuracy of 73%, which surpasses the 60% result achieved by the similar "LevyNet" architecture [2] despite having 1 fewer densely connected layer. 
@@ -100,13 +101,14 @@ In general, the deeper model improves upon the shallow model at reducing false p
 The confusion table for both models are shown in Figure 5. 
 
 ##### Figure 5. Confusion table
-![](./figures/confusion_table.png)
+<img src="./figures/confusion_table.png" width="500">
+
 
 We speculate that the poorer performance of our deep architecture may be due to differences in the training process ([2] also allowed earlier layers to learn by setting a low learning rate multiplier of 0.1) or differences in architecture ([2] kept as many fully connected layers as possible). 
 Even so, our best model is still on par with the bottom quartile of human performance as shown in Figure 6.
 
 ##### Figure 6. Human benchmark
-![](./figures/human_benchmark.png)
+<img src="./figures/human_benchmark.png" width="500">
 
 ### Future work
 
