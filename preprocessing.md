@@ -51,6 +51,21 @@ wget ftp://figment.csee.usf.edu/pub/DDSM/cases/benigns/benign_10/case4164/D_4164
 wget ftp://figment.csee.usf.edu/pub/DDSM/cases/cancers/cancer_09/case3407/B_3407_1.RIGHT_CC.LJPEG
 ```
 
+In retrospect, these overlay files are incorrect, even the web views were updated, but the ftp server still has them:
+```
+#one region off the body, one region just not informative
+#http://marathon.csee.usf.edu/Mammography/DDSM/thumbnails/benigns/benign_08/case1738/A-1738-1.html
+rm benign_08/case1738/A_1738_1.RIGHT_*.OVERLAY
+
+#region is off the body
+#http://marathon.csee.usf.edu/Mammography/DDSM/thumbnails/cancers/cancer_11/case1694/A-1694-1.html
+rm cancer_11/case1694/A_1694_1.LEFT_CC.OVERLAY
+```
+I only noticed after the crops looked like background noise (likely from interpolation).  
+
+
+
+
 
 
 Data descriptor is here:  http://marathon.csee.usf.edu/Mammography/DDSM/case_description.html#ALLFILES
@@ -291,8 +306,8 @@ done
 
 
 echo -e "`ls -1 train/benign/*.png | wc -l` train/benign/*.png\n`ls -1 train/malignant/*.png | wc -l` train/malignant/*.png\n`ls -1 validate/benign/*.png | wc -l` validate/benign/*.png\n`ls -1 validate/malignant/*.png | wc -l` validate/malignant/*.png"
-# 903 train/benign/*.png
-# 978 train/malignant/*.png
+# 901 train/benign/*.png
+# 977 train/malignant/*.png
 # 238 validate/benign/*.png
 # 243 validate/malignant/*.png
 
