@@ -73,7 +73,7 @@ The ImageNet pretrained weights were loaded, and the dense/fully-connected layer
 Where applicable, an L2-regularizer (l2=0.001) was added to the weights of both models to combat overfit. 
 The architectures are shown in Figure 3. 
 
-##### Figure 3a. Shallow architecture
+##### Figure 3a. Shallow 3-CNN architecture
 <img src="./figures/shallow_architecture.png" width="550">
 
 ##### Figure 3b. (adapted) InceptionV3 architecture
