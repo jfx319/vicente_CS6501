@@ -50,19 +50,23 @@ def parse_boundary(height, width, chaincode, pad=25):
     row = pad + int( chaincode[1] ) - 1
     boundary_pad[row, col] = True
 
+    begincheckpath_iter = np.floor(0.9*(len(chaincode) - 3))
     for i in range(2, len(chaincode) - 1):   
-
+        
         row, col = parse_chaincode(row, col, chaincode[i])
         boundary_pad[row, col] = True
 
-        if ( col == pad + int( chaincode[0] ) - 1 ) and ( row == pad + int( chaincode[1] ) - 1 ):
-            break #sometimes chaincode exceeds start (e.g. ./benign_01/case0241/C_0241_1.LEFT_MLO.OVERLAY)
+        #start checking for path closed status after 90% of chaincode length
+          #we set this threshold b/c there were instances of dumb chaincode moving back to beginning in the first 20 steps for no good reason (e.g. cancer_10/case1589/A_1589_1.LEFT_CC.OVERLAY)
+        if (i > begincheckpath_iter):
+            if ( col == pad + int( chaincode[0] ) - 1 ) and ( row == pad + int( chaincode[1] ) - 1 ):
+                break #sometimes chaincode exceeds start (e.g. ./benign_01/case0241/C_0241_1.LEFT_MLO.OVERLAY)
     
     #check end pixel closes loop
     if ( (col - (pad + int( chaincode[0] ) - 1))^2 + (row - (pad + int( chaincode[1] ) - 1  ))^2 ) > 1.5:  #sqrt(2) being the diagonal (max) distance in 8-connectivity
         raise ValueError('Final pixel in chaincode not close enough to start pixel...')
     
-    #fill boundary
+    #fill boundary should now work if above conditions met
     mask_pad = binary_fill_holes(boundary_pad)
     if not (np.sum(mask_pad) > np.sum(boundary_pad)): 
         ValueError('Unable to fill boundary')
