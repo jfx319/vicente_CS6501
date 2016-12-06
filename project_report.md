@@ -39,9 +39,9 @@ Although not huge when comparing with other machine learning image datasets, it 
 
 ##### Table 1b. Number of individual masses in training/validation split.
 | | Benign | Malignant | **Total**
-|---|---|---|---|
+|---|---|---|---
 | Train | 903 | 978 | 1881
-| Validation | 238 | 243 | 481
+| Validation | 238 | 243 | 481 
 
 
 
@@ -55,7 +55,7 @@ This utility [6] also claims to normalize batch effects due to different scanner
 The associated boundary "overlay" files were parsed, along with lesion-specific clinical metadata, and converted to filled binary masks. 
 A minimum enclosing circle was then calculated for each mass and the circular region of twice the diameter, was then cropped from the original image to include 50% margin as context for learning. 
 
-###### Figure . Example crops from image with 2 masses 
+###### Figure 2. Example crops from image with 2 masses 
 ![](./figures/enclosing_circle.png)
 
 ###### Data augmentation
@@ -64,20 +64,30 @@ The real-time augmentation on CPU was chosen to yield a wider augmentation varie
 The validation data was not augmented.
 Finally, the input images were also resized to 96x96 pixels for Shallow 3-CNN and 299x299 pixels for adapted InceptionV3. 
 Additionally, the single channel grayscale was duplicated across 3 channels for InceptionV3 since the pretrained architecture requires 3 color channels.
-Example augmentation image is shown in Figure 4.
-
-##### Pre-processing: Ground-truth Mask Reconstruction
-Because the overlay files specify tumor locations as a boundary file, these boundaries must be converted into a filled-in boolean mask so that internal pixels of the tumor can also be later referenced. This tumor pixel-wise segmentation task will be an extra task beyond the baseline classification task. 
 
 
 #### Model architecture
+As a baseline comparison, we implemented a relatively shallow 3 convolutional layer model similar to "Levy Net" [2]. 
+Based on the GoogLeNet performance from [2], we then decided to try its corresponding updated version InceptionV3 [8]. 
+The ImageNet pretrained weights were loaded, and the dense/fully-connected layers were stripped from the top and replaced with a single 2-neuron layer with softmax activation for 2 class categorical classification. 
+Where applicable, an L2-regularizer (l2=0.001) was added to the weights of both models to combat overfit. 
+The architectures are as follows: 
 
+###### Shallow 3-convolution layers architecture
+![](./figures/shallow_architecture.png)  
 
-Both models were implemented in keras [] with tensorflow backend and trained on gpu.
-
+###### Adapted InceptionV3 architecture
+![](./figures/adapted_InceptionV3.png)  
 
 
 #### Training
+Both models were implemented in keras [9] with tensorflow [10] backend and trained on gpu. 
+The Shallow 3-CN was trained from scratch with batch_size=128, using RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0) optimizer, and loss=binary_crossentropy. 
+The InceptionV3 model was fine-tuned with batch_size=32, optimizer=SGD(lr=.01, decay=0.0002, momentum=0.9, nesterov=False) and loss=categorical_crossentropy. Specifically, only the classification layer was finetuned for 200 epochs, after which Inception block 5 was also unfrozen and finetuned for another ~10 epochs. Some of the training logs for InceptionV3 were accidentally overwritten. Due to its heavy computational cost, we did not regenerate these values on a separate run.
+
+###### Figure 3. Training progress
+![](./figures/shallow_training.png) 
+![](./figures/InceptionV3_training.png)
 
 
 
@@ -108,13 +118,13 @@ Some images are distorted, perhaps due to small boundary shapes, which were then
 
 [7] https://github.com/trane293/DDSMUtility
 
+[8] https://github.com/tensorflow/models/tree/master/inception
 
+[9] https://github.com/fchollet/keras
 
+[10] https://github.com/tensorflow/tensorflow
 
-https://github.com/fchollet/keras
-https://github.com/tensorflow/tensorflow
-https://github.com/tensorflow/models/tree/master/inception
-
+[11] 
 
 
 
